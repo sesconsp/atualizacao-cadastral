@@ -124,6 +124,11 @@ select {
 }
 
 .mensagem-erro {
+    color: #333; /* Cor do texto alterada para ser mais legível */
+}
+
+.mensagem-erro::before {
+    content: '❌ '; /* Adiciona o X de erro em vermelho */
     color: #ff3333;
 }
 
@@ -140,6 +145,9 @@ footer .logo {
 .contact-title {
     color: #0097ce;
     font-size: 1.2em;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    padding-top: 10px;
 }
 
 .contact-header {

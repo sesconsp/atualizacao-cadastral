@@ -5,7 +5,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url('background.jpg.png') no-repeat center center fixed;
+    background: url('https://i.imgur.com/iE3JKYM.png') no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -140,8 +140,35 @@ footer .logo {
 .contact-title {
     color: #0097ce;
     font-size: 1.2em;
+}
+
+.contact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 20px;
     margin-bottom: 12px;
-    /* Removida a linha superior */
+    border-top: 1px solid rgba(0, 151, 206, 0.5);
     padding-top: 10px;
+}
+
+.btn-remove {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+.btn-remove:hover {
+    background-color: #ff1a1a;
+}
+
+.hidden {
+    display: none;
 }

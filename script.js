@@ -14,7 +14,7 @@ document.getElementById('formulario').addEventListener('submit', function (e) {
             const comunicacoes = item.querySelectorAll('input[name="comunicacoes[]"]:checked');
 
             if (!email.value || !telefone.value || comunicacoes.length === 0) {
-                statusMsg.textContent = '❌ Por favor, preencha todos os campos obrigatórios dos 2 primeiros contatos.';
+                statusMsg.textContent = 'Por favor, preencha todos os campos obrigatórios dos 2 primeiros contatos.';
                 statusMsg.className = 'mensagem-status mensagem-erro';
                 allValid = false;
                 return;
@@ -113,19 +113,16 @@ document.querySelector('.btn-add').addEventListener('click', function() {
     const contactSection = document.querySelector('.contact-item');
     const newContactItem = contactSection.cloneNode(true);
     
-    // Configura o botão de remover para o novo bloco
     const removeButton = newContactItem.querySelector('.btn-remove');
     removeButton.addEventListener('click', function() {
         this.parentNode.previousElementSibling.remove();
         this.parentNode.remove();
     });
     
-    // Exibe o botão de remover a partir do terceiro contato
     if (contactCount >= 2) {
         removeButton.classList.remove('hidden');
     }
 
-    // Cria o novo cabeçalho para o bloco de contato
     const newHeader = document.createElement('div');
     newHeader.className = 'contact-header';
     

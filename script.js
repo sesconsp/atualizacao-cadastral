@@ -6,13 +6,15 @@ document.getElementById('formulario').addEventListener('submit', function (e) {
     const contactItems = document.querySelectorAll('.contact-item');
     let allValid = true;
     for (let i = 0; i < contactItems.length; i++) {
+        // Valida apenas os dois primeiros blocos de contato
         if (i < 2) {
             const item = contactItems[i];
             const email = item.querySelector('input[name="email[]"]');
             const telefone = item.querySelector('input[name="telefone[]"]');
+            const comunicacoes = item.querySelectorAll('input[name="comunicacoes[]"]:checked');
 
-            if (!email.value || !telefone.value) {
-                statusMsg.textContent = '❌ Por favor, preencha todos os campos dos 2 primeiros contatos.';
+            if (!email.value || !telefone.value || comunicacoes.length === 0) {
+                statusMsg.textContent = '❌ Por favor, preencha todos os campos obrigatórios dos 2 primeiros contatos.';
                 statusMsg.className = 'mensagem-status mensagem-erro';
                 allValid = false;
                 return;
@@ -44,7 +46,7 @@ document.getElementById('formulario').addEventListener('submit', function (e) {
 
     const payload = { cnpj, razaoSocial, faturamento, funcionarios, contatos };
 
-    fetch('https://script.google.com/macros/s/AKfycbxKCyJ825KTBn1wFR77ouIXIWpNbPjJZpETRsCi7JytPSiEMdF8hKUshkV7VF8tQQ/exec', {
+    fetch('COLE_AQUI_A_SUA_NOVA_URL', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -107,14 +109,38 @@ applyPhoneMask(document.querySelector('input[name="telefone[]"]'));
 applyCurrencyMask(document.getElementById('faturamento'));
 
 document.querySelector('.btn-add').addEventListener('click', function() {
+    const contactCount = document.querySelectorAll('.contact-item').length;
     const contactSection = document.querySelector('.contact-item');
     const newContactItem = contactSection.cloneNode(true);
     
-    const contactCount = document.querySelectorAll('.contact-item').length;
+    // Configura o botão de remover para o novo bloco
+    const removeButton = newContactItem.querySelector('.btn-remove');
+    removeButton.addEventListener('click', function() {
+        this.parentNode.previousElementSibling.remove();
+        this.parentNode.remove();
+    });
+    
+    // Exibe o botão de remover a partir do terceiro contato
+    if (contactCount >= 2) {
+        removeButton.classList.remove('hidden');
+    }
+
+    // Cria o novo cabeçalho para o bloco de contato
+    const newHeader = document.createElement('div');
+    newHeader.className = 'contact-header';
+    
     const newTitle = document.createElement('h2');
     newTitle.className = 'contact-title';
     newTitle.textContent = `Contato ${contactCount + 1}`;
-    this.parentNode.insertBefore(newTitle, this);
+    
+    newHeader.appendChild(newTitle);
+    
+    if (contactCount >= 2) {
+        newHeader.appendChild(removeButton);
+    }
+
+    this.parentNode.insertBefore(newHeader, this);
+    this.parentNode.insertBefore(newContactItem, this);
 
     newContactItem.querySelectorAll('input, select').forEach(element => {
         element.required = false;
@@ -127,6 +153,4 @@ document.querySelector('.btn-add').addEventListener('click', function() {
 
     const newPhoneInput = newContactItem.querySelector('input[name="telefone[]"]');
     applyPhoneMask(newPhoneInput);
-
-    this.parentNode.insertBefore(newContactItem, this);
 });

@@ -1,0 +1,147 @@
+body {
+    margin: 0;
+    font-family: 'Roboto', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('background.jpg.png') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.container {
+    background-color: rgba(0, 151, 206, 0.6);
+    padding: 18px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    color: #fff;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 5px;
+    font-size: 1.7em;
+}
+
+.subtitulo-sescon {
+    text-align: center;
+    color: #fff;
+    font-size: 1.4em;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.descricao {
+    text-align: center;
+    font-size: 1.05em;
+    color: #fff;
+    margin-bottom: 18px;
+    line-height: 1.5em;
+}
+
+section {
+    margin-bottom: 24px;
+    padding: 14px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #0097ce;
+}
+
+section h2 {
+    color: #0097ce;
+    font-size: 1.2em;
+    margin-bottom: 12px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+.comunicacao-titulo {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.btn-add,
+.btn-submit {
+    background-color: #fff;
+    color: #0097ce;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.btn-add {
+    margin-top: 8px;
+}
+
+.btn-add:hover,
+.btn-submit:hover {
+    background-color: #f0f0f0;
+}
+
+.btn-submit {
+    width: 100%;
+    margin-top: 12px;
+}
+
+.mensagem-status {
+    text-align: center;
+    font-size: 1.1em;
+    margin-top: 12px;
+    display: none;
+}
+
+.mensagem-sucesso {
+    color: #00cc88;
+}
+
+.mensagem-erro {
+    color: #ff3333;
+}
+
+footer {
+    text-align: center;
+    margin-top: 15px;
+}
+
+footer .logo {
+    max-width: 140px;
+    height: auto;
+}
+
+.contact-title {
+    color: #0097ce;
+    font-size: 1.2em;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    /* Removida a linha superior */
+    padding-top: 10px;
+}

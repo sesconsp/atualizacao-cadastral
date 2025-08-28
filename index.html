@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualização Cadastral - Sescon-SP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Atualize seus dados cadastrais conosco</h1>
+        <p class="subtitulo-sescon">Sescon - SP</p>
+        <p class="descricao">
+            Este formulário é essencial para mantermos sua empresa sempre informada sobre comunicados importantes,
+            assembleias, cursos, eventos e outros assuntos relevantes. Preencha corretamente todas as informações.
+            Os campos de contato são obrigatórios para garantirmos a comunicação eficaz.
+        </p>
+
+        <form id="formulario">
+            <section>
+                <h2>1. Identificação da Empresa</h2>
+                <label for="cnpj">CNPJ:</label>
+                <input type="text" id="cnpj" name="cnpj" readonly placeholder="00.000.000/0000-00">
+
+                <label for="razao">Razão Social:</label>
+                <input type="text" id="razao" name="razao" readonly placeholder="Razão Social da Empresa">
+            </section>
+
+            <section>
+                <h2>2. Contatos</h2>
+                <div class="contact-item">
+                    <label for="email1">Este e-mail receberá os comunicados selecionados abaixo:</label>
+                    <input type="email" id="email1" name="email[]" placeholder="ex: contato@empresa.com" required>
+
+                    <label for="departamento1">Departamento (E-mail):</label>
+                    <select id="departamento1" name="departamento_email[]" required>
+                        <option value="">Selecione</option>
+                        <option value="Socio">Sócio</option>
+                        <option value="Diretoria">Diretoria</option>
+                        <option value="Recursos Humanos">Recursos Humanos (RH)</option>
+                        <option value="Departamento Pessoal">Departamento Pessoal</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="Contabilidade">Contabilidade</option>
+                        <option value="Juridico">Jurídico</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+
+                    <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Cursos"> Agenda de Cursos e Eventos</label>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
+                    <label style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Pesquisas"> Pesquisas de Satisfação</label> <label for="telefone1">Telefone:</label>
+                    <input type="tel" id="telefone1" name="telefone[]" placeholder="(DD) 99999-9999" required>
+
+                    <label for="departamento_tel1">Departamento (Telefone):</label>
+                    <select id="departamento_tel1" name="departamento_tel[]" required>
+                        <option value="">Selecione</option>
+                        <option value="Socio">Sócio</option>
+                        <option value="Diretoria">Diretoria</option>
+                        <option value="Recursos Humanos">Recursos Humanos (RH)</option>
+                        <option value="Departamento Pessoal">Departamento Pessoal</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="Contabilidade">Contabilidade</option>
+                        <option value="Juridico">Jurídico</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+                <button type="button" class="btn-add">+ Adicionar Contato</button>
+            </section>
+
+            <section>
+                <h2>3. Informações da Empresa</h2>
+                <label for="faturamento">Faturamento Bruto Anual (para cálculo das contribuições):</label>
+                <input type="text" id="faturamento" name="faturamento" placeholder="Ex: R$ 1.200.000,00" required>
+
+                <label for="funcionarios">Quantidade de Funcionários:</label>
+                <input type="number" id="funcionarios" name="funcionarios" placeholder="Ex: 25" required>
+            </section>
+
+            <button type="submit" class="btn-submit">Enviar Atualização</button>
+            <p class="mensagem-status"></p>
+        </form>
+        <footer><img src="logo.png.png" alt="Logo Sescon-SP" class="logo"></footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

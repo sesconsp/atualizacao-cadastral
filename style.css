@@ -84,6 +84,19 @@ select {
     margin-bottom: 8px;
 }
 
+/* Alterado para corrigir o alinhamento dos checkboxes */
+section label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-weight: normal;
+}
+
+section label input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
+
 .btn-add,
 .btn-submit {
     background-color: #fff;
@@ -132,6 +145,16 @@ select {
     color: #ff3333;
 }
 
+footer {
+    text-align: center;
+    margin-top: 15px;
+}
+
+footer .logo {
+    max-width: 140px;
+    height: auto;
+}
+
 .contact-title {
     color: #0097ce;
     font-size: 1.2em;
@@ -143,7 +166,6 @@ select {
     align-items: center;
     margin-top: 20px;
     margin-bottom: 12px;
-    /* Linha removida */
     padding-top: 10px;
 }
 

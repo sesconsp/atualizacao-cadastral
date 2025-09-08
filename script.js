@@ -6,14 +6,14 @@ document.getElementById('formulario').addEventListener('submit', function (e) {
     const contactItems = document.querySelectorAll('.contact-item');
     let allValid = true;
     for (let i = 0; i < contactItems.length; i++) {
-        // Valida apenas os dois primeiros blocos de contato
         if (i < 2) {
             const item = contactItems[i];
             const email = item.querySelector('input[name="email[]"]');
             const telefone = item.querySelector('input[name="telefone[]"]');
+            const departamento = item.querySelector('select[name="departamento[]"]');
             const comunicacoes = item.querySelectorAll('input[name="comunicacoes[]"]:checked');
 
-            if (!email.value || !telefone.value || comunicacoes.length === 0) {
+            if (!email.value || !telefone.value || !departamento.value || comunicacoes.length === 0) {
                 statusMsg.textContent = 'Por favor, preencha todos os campos obrigatórios dos 2 primeiros contatos.';
                 statusMsg.className = 'mensagem-status mensagem-erro';
                 allValid = false;
@@ -38,8 +38,7 @@ document.getElementById('formulario').addEventListener('submit', function (e) {
         contatos.push({
             email: item.querySelector('input[name="email[]"]').value,
             telefone: item.querySelector('input[name="telefone[]"]').value,
-            departamentoEmail: item.querySelector('select[name="departamento_email[]"]').value,
-            departamentoTelefone: item.querySelector('select[name="departamento_tel[]"]').value,
+            departamento: item.querySelector('select[name="departamento[]"]').value,
             preferencias: Array.from(item.querySelectorAll('input[name="comunicacoes[]"]:checked')).map(el => el.value)
         });
     });

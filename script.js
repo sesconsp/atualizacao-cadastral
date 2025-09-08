@@ -149,4 +149,4 @@ document.querySelector('.btn-add').addEventListener('click', function() {
 
     const newPhoneInput = newContactItem.querySelector('input[name="telefone[]"]');
     applyPhoneMask(newPhoneInput);
-});"
+});

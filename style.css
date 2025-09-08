@@ -124,30 +124,17 @@ select {
 }
 
 .mensagem-erro {
-    color: #333; /* Cor do texto alterada para ser mais legível */
+    color: #333;
 }
 
 .mensagem-erro::before {
-    content: '❌ '; /* Adiciona o X de erro em vermelho */
+    content: '❌ ';
     color: #ff3333;
-}
-
-footer {
-    text-align: center;
-    margin-top: 15px;
-}
-
-footer .logo {
-    max-width: 140px;
-    height: auto;
 }
 
 .contact-title {
     color: #0097ce;
     font-size: 1.2em;
-    margin-top: 20px;
-    margin-bottom: 12px;
-    padding-top: 10px;
 }
 
 .contact-header {
@@ -156,7 +143,7 @@ footer .logo {
     align-items: center;
     margin-top: 20px;
     margin-bottom: 12px;
-    border-top: 1px solid rgba(0, 151, 206, 0.5);
+    /* Linha removida */
     padding-top: 10px;
 }
 

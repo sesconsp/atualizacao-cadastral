@@ -1,3 +1,4 @@
+
 body {
     margin: 0;
     font-family: 'Roboto', Arial, sans-serif;
@@ -44,11 +45,16 @@ h1 {
 }
 
 section {
-    margin-bottom: 24px;
+    margin-bottom: 24px; /* Adiciona espaço entre as seções */
     padding: 14px;
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid #0097ce;
+}
+
+/* Garante que o primeiro campo de identificação não tenha margem superior desnecessária */
+section:first-of-type {
+    margin-top: 0; 
 }
 
 section h2 {

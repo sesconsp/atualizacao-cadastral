@@ -7,61 +7,79 @@ body {
     min-height: 100vh;
     background: url('https://i.imgur.com/iE3JKYM.png') no-repeat center center fixed;
     background-size: cover;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .container {
-    background-color: rgba(0, 151, 206, 0.6);
-    padding: 18px;
-    border-radius: 12px;
+    background-color: rgba(0, 151, 206, 0.95);
+    padding: 30px;
+    border-radius: 15px;
     width: 100%;
-    max-width: 600px;
+    max-width: 700px;
     color: #fff;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
 }
 
 h1 {
     text-align: center;
     color: #fff;
     margin-bottom: 5px;
-    font-size: 1.7em;
+    font-size: 2em;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .subtitulo-sescon {
     text-align: center;
     color: #fff;
-    font-size: 1.4em;
+    font-size: 1.5em;
     margin-top: 0px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .descricao {
     text-align: center;
-    font-size: 1.05em;
+    font-size: 1.1em;
     color: #fff;
-    margin-bottom: 18px;
-    line-height: 1.5em;
+    margin-bottom: 25px;
+    line-height: 1.6em;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 section {
-    margin-bottom: 24px;
-    padding: 14px;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid #0097ce;
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(0, 151, 206, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 section h2 {
     color: #0097ce;
-    font-size: 1.2em;
-    margin-bottom: 12px;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    font-weight: 600;
+    border-bottom: 2px solid #0097ce;
+    padding-bottom: 8px;
 }
 
 label {
     display: block;
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 8px;
     color: #333;
+    font-size: 0.95em;
 }
 
 input[type="text"],
@@ -70,123 +88,286 @@ input[type="tel"],
 input[type="number"],
 select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
     font-size: 16px;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="number"]:focus,
+select:focus {
+    outline: none;
+    border-color: #0097ce;
+    box-shadow: 0 0 0 3px rgba(0, 151, 206, 0.1);
+}
+
+input[readonly] {
+    background-color: #f5f5f5;
+    color: #666;
+    cursor: not-allowed;
 }
 
 .comunicacao-titulo {
-    font-weight: bold;
+    font-weight: 600;
     color: #333;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    margin-top: 15px;
+    font-size: 1em;
 }
 
 section label {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-weight: normal;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+section label:hover {
+    color: #0097ce;
 }
 
 section label input[type="checkbox"] {
     width: auto;
-    margin-right: 8px;
+    margin-right: 10px;
+    margin-bottom: 0;
+    transform: scale(1.2);
+    accent-color: #0097ce;
 }
 
 .btn-add,
 .btn-submit {
-    background-color: #fff;
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
     color: #0097ce;
-    padding: 12px 18px;
-    border: none;
-    border-radius: 8px;
+    padding: 14px 24px;
+    border: 2px solid #0097ce;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 600;
     display: inline-block;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .btn-add {
-    margin-top: 8px;
+    margin-top: 15px;
 }
 
 .btn-add:hover,
 .btn-submit:hover {
-    background-color: #f0f0f0;
+    background: linear-gradient(135deg, #0097ce 0%, #007bb5 100%);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 151, 206, 0.3);
 }
 
 .btn-submit {
     width: 100%;
-    margin-top: 12px;
+    margin-top: 20px;
+    font-size: 18px;
+    padding: 16px 24px;
 }
 
 .mensagem-status {
     text-align: center;
     font-size: 1.1em;
-    margin-top: 12px;
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
     display: none;
+    transition: all 0.3s ease;
 }
 
 .mensagem-sucesso {
-    color: #00cc88;
+    background-color: rgba(40, 167, 69, 0.9);
+    color: #fff;
+    border: 2px solid #28a745;
 }
 
 .mensagem-erro {
-    color: #333;
-}
-
-.mensagem-erro::before {
-    content: '❌ ';
-    color: #ff3333;
+    background-color: rgba(220, 53, 69, 0.9);
+    color: #fff;
+    border: 2px solid #dc3545;
 }
 
 footer {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 40px;
 }
 
 footer .logo {
     display: block;
     margin: 0 auto;
-    max-width: 140px;
+    max-width: 160px;
     height: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
 
 .contact-title {
     color: #0097ce;
     font-size: 1.2em;
+    font-weight: 600;
 }
 
 .contact-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
-    margin-bottom: 12px;
-    padding-top: 10px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, rgba(0, 151, 206, 0.1) 0%, rgba(0, 151, 206, 0.05) 100%);
+    border-radius: 10px;
+    border-left: 4px solid #0097ce;
 }
 
 .btn-remove {
-    background-color: #ff4d4d;
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
     color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
+    padding: 8px 16px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 0.9em;
-    font-weight: bold;
+    font-weight: 600;
     display: inline-block;
-    margin-left: 10px;
     white-space: nowrap;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .btn-remove:hover {
-    background-color: #ff1a1a;
+    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
 }
 
 .hidden {
     display: none;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    h1 {
+        font-size: 1.6em;
+    }
+    
+    .subtitulo-sescon {
+        font-size: 1.3em;
+    }
+    
+    section {
+        padding: 15px;
+    }
+    
+    .contact-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .btn-remove {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.4em;
+    }
+    
+    .subtitulo-sescon {
+        font-size: 1.2em;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    
+    .btn-add,
+    .btn-submit {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
+/* Loading Animation */
+.loading {
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0097ce;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translateY(-50%) rotate(0deg); }
+    100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* Smooth transitions for form interactions */
+* {
+    transition: all 0.2s ease;
+}
+
+/* Enhanced focus states */
+input:focus,
+select:focus {
+    transform: translateY(-1px);
+}
+
+/* Better checkbox styling */
+input[type="checkbox"] {
+    position: relative;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+    animation: checkboxPulse 0.3s ease;
+}
+
+@keyframes checkboxPulse {
+    0% { transform: scale(1.2); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1.2); }
+}
+

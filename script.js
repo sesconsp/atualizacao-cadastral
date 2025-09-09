@@ -56,7 +56,7 @@ document.getElementById('formulario').addEventListener('submit', function (e) {
     const payload = { cnpj, razaoSocial, faturamento, funcionarios, contatos };
 
     // A URL do seu Google Apps Script sem o '/u/1/'
-    fetch('https://script.google.com/macros/s/AKfycbwjwFHcx4soLcxIS2lPoOJsNVX75iY5fC_lfKHq5oy5aO9sO2u8cd6Yv6xgDwojNmZ7gg/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbyx7Vpij3YoaeZcrNwr-QYYKsQ-zRa7d74HF_z81Un9bKK33g4kEHGQ1JDQvyjeZ4GWqw/exec', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

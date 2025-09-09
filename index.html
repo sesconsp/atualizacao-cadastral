@@ -5,72 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atualização Cadastral - Sescon-SP</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Formulário de atualização cadastral do Sescon-SP para empresas representadas">
+    <meta name="keywords" content="Sescon, São Paulo, atualização cadastral, empresas">
+    <link rel="icon" type="image/x-icon" href="https://i.imgur.com/zWWSzuu.png">
 </head>
 <body>
     <div class="container">
-        <h1>Atualize seus dados cadastrais conosco</h1>
-        <p class="subtitulo-sescon">Sescon - SP</p>
-        <p class="descricao">Preencha corretamente todas as informações. Os campos de contato são obrigatórios para garantirmos a comunicação eficaz.</p>
+        <header>
+            <h1>Atualize seus dados cadastrais conosco</h1>
+            <p class="subtitulo-sescon">Sescon - SP</p>
+            <p class="descricao">Preencha corretamente todas as informações. Os campos de contato são obrigatórios para garantirmos a comunicação eficaz com sua empresa.</p>
+        </header>
 
-        <form id="formulario">
+        <form id="formulario" novalidate>
             <section>
                 <h2>1. Identificação da Empresa</h2>
-                <label for="cnpj">CNPJ:</label>
-                <input type="text" id="cnpj" name="cnpj" readonly placeholder="00.000.000/0000-00">
+                <div class="form-group">
+                    <label for="cnpj">CNPJ:</label>
+                    <input type="text" id="cnpj" name="cnpj" readonly placeholder="00.000.000/0000-00" aria-describedby="cnpj-help">
+                    <small id="cnpj-help" class="form-help">Este campo é preenchido automaticamente</small>
+                </div>
 
-                <label for="razao">Razão Social:</label>
-                <input type="text" id="razao" name="razao" readonly placeholder="Razão Social da Empresa">
+                <div class="form-group">
+                    <label for="razao">Razão Social:</label>
+                    <input type="text" id="razao" name="razao" readonly placeholder="Razão Social da Empresa" aria-describedby="razao-help">
+                    <small id="razao-help" class="form-help">Este campo é preenchido automaticamente</small>
+                </div>
             </section>
 
             <section>
                 <h2>2. Contatos</h2>
-                <div class="contact-item">
-                    <label for="email1">Este e-mail receberá os comunicados selecionados abaixo:</label>
-                    <input type="email" id="email1" name="email[]" placeholder="ex: contato@empresa.com" required>
+                <div class="contact-item" data-contact-number="1">
+                    <div class="form-group">
+                        <label for="email1">Este e-mail receberá os comunicados selecionados abaixo: *</label>
+                        <input type="email" id="email1" name="email[]" placeholder="ex: contato@empresa.com" required aria-describedby="email1-help">
+                        <small id="email1-help" class="form-help">Digite um e-mail válido para receber as comunicações</small>
+                    </div>
                     
-                    <label for="telefone1">Telefone:</label>
-                    <input type="tel" id="telefone1" name="telefone[]" placeholder="(DD) 99999-9999" required>
+                    <div class="form-group">
+                        <label for="telefone1">Telefone: *</label>
+                        <input type="tel" id="telefone1" name="telefone[]" placeholder="(DD) 99999-9999" required aria-describedby="telefone1-help">
+                        <small id="telefone1-help" class="form-help">Digite o telefone com DDD</small>
+                    </div>
                     
-                    <label for="departamento1">Departamento:</label>
-                    <select id="departamento1" name="departamento[]" required>
-                        <option value="">Selecione</option>
-                        <option value="Socio">Sócio</option>
-                        <option value="Diretoria">Diretoria</option>
-                        <option value="Recursos Humanos">Recursos Humanos (RH)</option>
-                        <option value="Departamento Pessoal">Departamento Pessoal</option>
-                        <option value="Financeiro">Financeiro</option>
-                        <option value="Contabilidade">Contabilidade</option>
-                        <option value="Juridico">Jurídico</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Outros">Outros</option>
-                    </select>
+                    <div class="form-group">
+                        <label for="departamento1">Departamento: *</label>
+                        <select id="departamento1" name="departamento[]" required aria-describedby="departamento1-help">
+                            <option value="">Selecione o departamento</option>
+                            <option value="Socio">Sócio</option>
+                            <option value="Diretoria">Diretoria</option>
+                            <option value="Recursos Humanos">Recursos Humanos (RH)</option>
+                            <option value="Departamento Pessoal">Departamento Pessoal</option>
+                            <option value="Financeiro">Financeiro</option>
+                            <option value="Contabilidade">Contabilidade</option>
+                            <option value="Juridico">Jurídico</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                        <small id="departamento1-help" class="form-help">Selecione o departamento responsável</small>
+                    </div>
 
-                    <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
-                    <label><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
-                    <label><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
-                    <label><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
-                    <label style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
-                    
-                    <span id="remove-btn-template" class="btn-remove hidden">Remover</span>
+                    <div class="form-group">
+                        <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber: *</p>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="comunicacoes[]" value="Boletos" required> Boletos e Comunicados Financeiros</label>
+                            <label><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
+                            <label><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
+                            <label><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
+                        </div>
+                    </div>
                 </div>
-                <button type="button" class="btn-add">+ Adicionar Contato</button>
+                
+                <button type="button" class="btn-add" aria-label="Adicionar novo contato">
+                    <span>+ Adicionar Contato</span>
+                </button>
             </section>
 
             <section>
                 <h2>3. Informações da Empresa</h2>
-                <label for="faturamento">Faturamento Bruto Anual (para cálculo das contribuições):</label>
-                <input type="text" id="faturamento" name="faturamento" placeholder="Ex: R$ 1.200.000,00" required>
+                <div class="form-group">
+                    <label for="faturamento">Faturamento Bruto Anual (para cálculo das contribuições): *</label>
+                    <input type="text" id="faturamento" name="faturamento" placeholder="Ex: R$ 1.200.000,00" required aria-describedby="faturamento-help">
+                    <small id="faturamento-help" class="form-help">Informe o faturamento bruto anual da empresa</small>
+                </div>
 
-                <label for="funcionarios">Quantidade de Funcionários:</label>
-                <input type="number" id="funcionarios" name="funcionarios" placeholder="Ex: 25" min="0" required>
+                <div class="form-group">
+                    <label for="funcionarios">Quantidade de Funcionários: *</label>
+                    <input type="number" id="funcionarios" name="funcionarios" placeholder="Ex: 25" min="0" required aria-describedby="funcionarios-help">
+                    <small id="funcionarios-help" class="form-help">Informe o número total de funcionários</small>
+                </div>
             </section>
 
-            <button type="submit" class="btn-submit">Enviar Atualização</button>
-            <p class="mensagem-status"></p>
+            <button type="submit" class="btn-submit" aria-describedby="submit-help">
+                <span>Enviar Atualização</span>
+            </button>
+            <small id="submit-help" class="form-help">Clique para enviar os dados atualizados</small>
+            
+            <div class="mensagem-status" role="alert" aria-live="polite"></div>
         </form>
-        <footer><img src="https://i.imgur.com/zWWSzuu.png" alt="Logo Sescon-SP" class="logo"></footer>
+        
+        <footer>
+            <img src="https://i.imgur.com/zWWSzuu.png" alt="Logo Sescon-SP" class="logo">
+            <p style="text-align: center; margin-top: 15px; font-size: 0.9em; opacity: 0.8;">
+                © 2024 Sescon-SP - Sindicato das Empresas de Serviços Contábeis e das Empresas de Assessoramento, Perícias, Informações e Pesquisas do Estado de São Paulo
+            </p>
+        </footer>
     </div>
-    <script src="script.js"></script>
+    
+    <script src="script_final.js"></script>
 </body>
 </html>
 

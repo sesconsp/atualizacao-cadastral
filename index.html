@@ -311,7 +311,7 @@
 
             const payload = { cnpj, razaoSocial, faturamento, funcionarios, contatos };
 
-            fetch('https://script.google.com/macros/s/AKfycbwor-PwXMy-Bt3BasNwluKn9Jge9InWgPmY4450F3PgObb5wA7wOXQanIshmKhYF8U7_g/exec, {
+            fetch('https://script.google.com/macros/s/AKfycbwor-PwXMy-Bt3BasNwluKn9Jge9InWgPmY4450F3PgObb5wA7wOXQanIshmKhYF8U7_g/exec', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -418,4 +418,4 @@
         });
     </script>
 </body>
-</html>"
+</html>

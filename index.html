@@ -217,7 +217,12 @@
 
             <section>
                 <h2>2. Contatos</h2>
+                
+                <!-- PRIMEIRO CONTATO (OBRIGATÓRIO) -->
                 <div class="contact-item">
+                    <div class="contact-header">
+                        <h2 class="contact-title">Contato 1 (Obrigatório)</h2>
+                    </div>
                     <label for="email1">Este e-mail receberá os comunicados selecionados abaixo:</label>
                     <input type="email" id="email1" name="email[]" placeholder="ex: contato@empresa.com" required>
                     
@@ -243,9 +248,40 @@
                     <label><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
                     <label><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
                     <label style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
-                    
-                    <span id="remove-btn-template" class="btn-remove hidden">Remover</span>
                 </div>
+
+                <!-- SEGUNDO CONTATO (OBRIGATÓRIO) -->
+                <div class="contact-item">
+                    <div class="contact-header">
+                        <h2 class="contact-title">Contato 2 (Obrigatório)</h2>
+                    </div>
+                    <label for="email2">Este e-mail receberá os comunicados selecionados abaixo:</label>
+                    <input type="email" id="email2" name="email[]" placeholder="ex: financeiro@empresa.com" required>
+                    
+                    <label for="telefone2">Telefone:</label>
+                    <input type="tel" id="telefone2" name="telefone[]" placeholder="(DD) 98888-8888" required>
+                    
+                    <label for="departamento2">Departamento:</label>
+                    <select id="departamento2" name="departamento[]" required>
+                        <option value="">Selecione</option>
+                        <option value="Socio">Sócio</option>
+                        <option value="Diretoria">Diretoria</option>
+                        <option value="Recursos Humanos">Recursos Humanos (RH)</option>
+                        <option value="Departamento Pessoal">Departamento Pessoal</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="Contabilidade">Contabilidade</option>
+                        <option value="Juridico">Jurídico</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+
+                    <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
+                    <label style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
+                </div>
+                
                 <button type="button" class="btn-add">+ Adicionar Contato</button>
             </section>
 
@@ -269,12 +305,28 @@
             const statusMsg = document.querySelector('.mensagem-status');
             statusMsg.style.display = 'block';
 
+            // --- INÍCIO DA VALIDAÇÃO ---
             const contactItems = document.querySelectorAll('.contact-item');
             let allValid = true;
-            // A validação foi removida para simplificar o teste, pode ser adicionada de volta depois
-            // if (!allValid) {
-            //     return;
-            // }
+            for (let i = 0; i < 2; i++) { // Verifica os 2 primeiros contatos
+                const item = contactItems[i];
+                const email = item.querySelector('input[name="email[]"]');
+                const telefone = item.querySelector('input[name="telefone[]"]');
+                const departamento = item.querySelector('select[name="departamento[]"]');
+                const comunicacoes = item.querySelectorAll('input[name="comunicacoes[]"]:checked');
+
+                if (!email.value || !telefone.value || !departamento.value || comunicacoes.length === 0) {
+                    statusMsg.textContent = `Por favor, preencha todos os campos obrigatórios do Contato ${i + 1}.`;
+                    statusMsg.className = 'mensagem-status mensagem-erro';
+                    allValid = false;
+                    break; // Para a verificação no primeiro erro encontrado
+                }
+            }
+
+            if (!allValid) {
+                return; // Impede o envio do formulário se a validação falhar
+            }
+            // --- FIM DA VALIDAÇÃO ---
 
             statusMsg.textContent = 'Enviando...';
             
@@ -285,43 +337,39 @@
 
             const contatos = [];
             document.querySelectorAll('.contact-item').forEach(item => {
-                contatos.push({
-                    email: item.querySelector('input[name="email[]"]').value,
-                    telefone: item.querySelector('input[name="telefone[]"]').value,
-                    departamento: item.querySelector('select[name="departamento[]"]').value,
-                    preferencias: Array.from(item.querySelectorAll('input[name="comunicacoes[]"]:checked')).map(el => el.value)
-                });
+                // Só adiciona o contato se o email estiver preenchido
+                if (item.querySelector('input[name="email[]"]').value) {
+                    contatos.push({
+                        email: item.querySelector('input[name="email[]"]').value,
+                        telefone: item.querySelector('input[name="telefone[]"]').value,
+                        departamento: item.querySelector('select[name="departamento[]"]').value,
+                        preferencias: Array.from(item.querySelectorAll('input[name="comunicacoes[]"]:checked')).map(el => el.value)
+                    });
+                }
             });
 
             const payload = { cnpj, razaoSocial, faturamento, funcionarios, contatos };
 
-            // --- INÍCIO DA ALTERAÇÃO ---
             const url = 'https://script.google.com/macros/s/AKfycbzS2087G8T3LyXKEUihAK0eLnVvzz40jLDaiV4uepTdbjfv_sv7MZLf-SqYJcZWjYkc_g/exec';
 
             fetch(url, {
                 method: 'POST',
-                mode: 'no-cors', // Mude o modo para 'no-cors'
+                mode: 'no-cors',
                 cache: 'no-cache',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload ),
-                redirect: 'follow' // Garante que o redirecionamento seja seguido
+                redirect: 'follow'
             })
             .then(res => {
-                // Como estamos em modo 'no-cors', não podemos ler a resposta.
-                // Apenas assumimos o sucesso se não houver um erro de rede.
                 statusMsg.textContent = '✔ Dados enviados com sucesso!';
                 statusMsg.className = 'mensagem-status mensagem-sucesso';
-                document.getElementById('formulario').reset(); // Limpa o formulário
+                document.getElementById('formulario').reset();
             })
             .catch(error => {
-                // O erro aqui geralmente será um problema de rede, não do script.
                 statusMsg.textContent = '❌ Ocorreu um erro. Tente novamente.';
                 statusMsg.className = 'mensagem-status mensagem-erro';
                 console.error('Erro no fetch:', error);
             });
-            // --- FIM DA ALTERAÇÃO ---
         });
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -367,7 +415,8 @@
             });
         }
 
-        applyPhoneMask(document.querySelector('input[name="telefone[]"]'));
+        // Aplica a máscara para TODOS os campos de telefone iniciais
+        document.querySelectorAll('input[name="telefone[]"]').forEach(applyPhoneMask);
         applyCurrencyMask(document.getElementById('faturamento'));
 
         document.querySelector('.btn-add').addEventListener('click', function() {
@@ -375,38 +424,9 @@
             const contactSection = document.querySelector('.contact-item');
             const newContactItem = contactSection.cloneNode(true);
             
-            const removeButton = newContactItem.querySelector('.btn-remove');
-            removeButton.addEventListener('click', function() {
-                const parentSection = this.closest('section');
-                const headerToRemove = this.closest('.contact-header');
-                const itemToRemove = headerToRemove.nextElementSibling;
-
-                if (headerToRemove) headerToRemove.remove();
-                if (itemToRemove) itemToRemove.remove();
-            });
-            
-            if (contactCount >= 2) {
-                removeButton.classList.remove('hidden');
-            }
-
-            const newHeader = document.createElement('div');
-            newHeader.className = 'contact-header';
-            
-            const newTitle = document.createElement('h2');
-            newTitle.className = 'contact-title';
-            newTitle.textContent = `Contato ${contactCount + 1}`;
-            
-            newHeader.appendChild(newTitle);
-            
-            if (contactCount >= 2) {
-                newHeader.appendChild(removeButton);
-            }
-
-            this.parentNode.insertBefore(newHeader, this);
-            this.parentNode.insertBefore(newContactItem, this);
-
+            // Limpa os campos do novo contato clonado
             newContactItem.querySelectorAll('input, select').forEach(element => {
-                element.required = false;
+                element.required = false; // Contatos adicionais não são obrigatórios
                 if (element.type === 'checkbox') {
                     element.checked = false;
                 } else {
@@ -414,6 +434,29 @@
                 }
             });
 
+            // Adiciona o cabeçalho com o título e o botão de remover
+            const newHeader = document.createElement('div');
+            newHeader.className = 'contact-header';
+            
+            const newTitle = document.createElement('h2');
+            newTitle.className = 'contact-title';
+            newTitle.textContent = `Contato ${contactCount + 1}`;
+            
+            const removeButton = document.createElement('span');
+            removeButton.className = 'btn-remove';
+            removeButton.textContent = 'Remover';
+            removeButton.onclick = function() {
+                newHeader.remove();
+                newContactItem.remove();
+            };
+            
+            newHeader.appendChild(newTitle);
+            newHeader.appendChild(removeButton);
+
+            this.parentNode.insertBefore(newHeader, this);
+            this.parentNode.insertBefore(newContactItem, this);
+
+            // Aplica a máscara de telefone ao novo campo
             const newPhoneInput = newContactItem.querySelector('input[name="telefone[]"]');
             applyPhoneMask(newPhoneInput);
         });

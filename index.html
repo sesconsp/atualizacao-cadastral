@@ -215,10 +215,9 @@
                 <input type="text" id="razao" name="razao" readonly placeholder="Razão Social da Empresa">
             </section>
 
-            <section>
+            <section id="contact-section">
                 <h2>2. Contatos</h2>
                 
-                <!-- PRIMEIRO CONTATO (OBRIGATÓRIO) -->
                 <div class="contact-item">
                     <div class="contact-header">
                         <h2 class="contact-title">Contato 1 (Obrigatório)</h2>
@@ -250,7 +249,6 @@
                     <label style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
                 </div>
 
-                <!-- SEGUNDO CONTATO (OBRIGATÓRIO) -->
                 <div class="contact-item">
                     <div class="contact-header">
                         <h2 class="contact-title">Contato 2 (Obrigatório)</h2>
@@ -305,10 +303,9 @@
             const statusMsg = document.querySelector('.mensagem-status');
             statusMsg.style.display = 'block';
 
-            // --- INÍCIO DA VALIDAÇÃO ---
             const contactItems = document.querySelectorAll('.contact-item');
             let allValid = true;
-            for (let i = 0; i < 2; i++) { // Verifica os 2 primeiros contatos
+            for (let i = 0; i < 2; i++) {
                 const item = contactItems[i];
                 const email = item.querySelector('input[name="email[]"]');
                 const telefone = item.querySelector('input[name="telefone[]"]');
@@ -319,14 +316,13 @@
                     statusMsg.textContent = `Por favor, preencha todos os campos obrigatórios do Contato ${i + 1}.`;
                     statusMsg.className = 'mensagem-status mensagem-erro';
                     allValid = false;
-                    break; // Para a verificação no primeiro erro encontrado
+                    break;
                 }
             }
 
             if (!allValid) {
-                return; // Impede o envio do formulário se a validação falhar
+                return;
             }
-            // --- FIM DA VALIDAÇÃO ---
 
             statusMsg.textContent = 'Enviando...';
             
@@ -337,7 +333,6 @@
 
             const contatos = [];
             document.querySelectorAll('.contact-item').forEach(item => {
-                // Só adiciona o contato se o email estiver preenchido
                 if (item.querySelector('input[name="email[]"]').value) {
                     contatos.push({
                         email: item.querySelector('input[name="email[]"]').value,
@@ -384,12 +379,12 @@
                     formattedValue = `(${value.substring(0, 2)}`;
                 }
                 if (value.length > 2) {
-                    if (value.length > 10) { // Celular
+                    if (value.length > 10) {
                          formattedValue += `) ${value.substring(2, 7)}`;
                          if (value.length > 7) {
                             formattedValue += `-${value.substring(7, 11)}`;
                          }
-                    } else { // Fixo
+                    } else {
                         formattedValue += `) ${value.substring(2, 6)}`;
                         if (value.length > 6) {
                             formattedValue += `-${value.substring(6, 10)}`;
@@ -415,51 +410,58 @@
             });
         }
 
-        // Aplica a máscara para TODOS os campos de telefone iniciais
         document.querySelectorAll('input[name="telefone[]"]').forEach(applyPhoneMask);
         applyCurrencyMask(document.getElementById('faturamento'));
 
+        // --- INÍCIO DA ALTERAÇÃO ---
         document.querySelector('.btn-add').addEventListener('click', function() {
-            const contactCount = document.querySelectorAll('.contact-item').length;
-            const contactSection = document.querySelector('.contact-item');
-            const newContactItem = contactSection.cloneNode(true);
+            const contactSection = document.getElementById('contact-section');
+            const contactCount = contactSection.querySelectorAll('.contact-item').length;
             
-            // Limpa os campos do novo contato clonado
+            // Pega o primeiro item de contato como um modelo
+            const contactTemplate = contactSection.querySelector('.contact-item');
+            const newContactItem = contactTemplate.cloneNode(true);
+            
+            // Limpa os valores e remove o 'required' dos campos clonados
             newContactItem.querySelectorAll('input, select').forEach(element => {
-                element.required = false; // Contatos adicionais não são obrigatórios
+                element.required = false;
                 if (element.type === 'checkbox') {
                     element.checked = false;
                 } else {
                     element.value = '';
                 }
+                // Limpa IDs para evitar duplicatas
+                element.id = ''; 
             });
 
-            // Adiciona o cabeçalho com o título e o botão de remover
-            const newHeader = document.createElement('div');
-            newHeader.className = 'contact-header';
-            
-            const newTitle = document.createElement('h2');
-            newTitle.className = 'contact-title';
-            newTitle.textContent = `Contato ${contactCount + 1}`;
-            
+            // Corrige o título do bloco clonado
+            const titleElement = newContactItem.querySelector('.contact-title');
+            if (titleElement) {
+                titleElement.textContent = `Contato ${contactCount + 1}`;
+            }
+
+            // Adiciona o botão de remover
             const removeButton = document.createElement('span');
             removeButton.className = 'btn-remove';
             removeButton.textContent = 'Remover';
             removeButton.onclick = function() {
-                newHeader.remove();
                 newContactItem.remove();
             };
             
-            newHeader.appendChild(newTitle);
-            newHeader.appendChild(removeButton);
+            // Adiciona o botão de remover ao cabeçalho do novo item
+            const header = newContactItem.querySelector('.contact-header');
+            if (header) {
+                header.appendChild(removeButton);
+            }
 
-            this.parentNode.insertBefore(newHeader, this);
-            this.parentNode.insertBefore(newContactItem, this);
+            // Insere o novo item de contato antes do botão "+ Adicionar Contato"
+            contactSection.insertBefore(newContactItem, this);
 
             // Aplica a máscara de telefone ao novo campo
             const newPhoneInput = newContactItem.querySelector('input[name="telefone[]"]');
             applyPhoneMask(newPhoneInput);
         });
+        // --- FIM DA ALTERAÇÃO ---
     </script>
 </body>
 </html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualização Cadastral - Sescon-SP</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url('https://i.imgur.com/iE3JKYM.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .container {
+            background-color: rgba(0, 151, 206, 0.6);
+            padding: 18px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 600px;
+            color: #fff;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 5px;
+            font-size: 1.7em;
+        }
+
+        .subtitulo-sescon {
+            text-align: center;
+            color: #fff;
+            font-size: 1.4em;
+            margin-top: 0px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .descricao {
+            text-align: center;
+            font-size: 1.05em;
+            color: #fff;
+            margin-bottom: 18px;
+            line-height: 1.5em;
+        }
+
+        section {
+            margin-bottom: 24px;
+            padding: 14px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #0097ce;
+        }
+
+        section h2 {
+            color: #0097ce;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        .comunicacao-titulo {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        section label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: normal;
+        }
+
+        section label input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .btn-add,
+        .btn-submit {
+            background-color: #fff;
+            color: #0097ce;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-add {
+            margin-top: 8px;
+        }
+
+        .btn-add:hover,
+        .btn-submit:hover {
+            background-color: #f0f0f0;
+        }
+
+        .btn-submit {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .mensagem-status {
+            text-align: center;
+            font-size: 1.1em;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .mensagem-sucesso {
+            color: #00cc88;
+        }
+
+        .mensagem-erro {
+            color: #333;
+        }
+
+        .mensagem-erro::before {
+            content: '❌ ';
+            color: #ff3333;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        footer .logo {
+            display: block;
+            margin: 0 auto;
+            max-width: 140px;
+            height: auto;
+        }
+
+        .contact-title {
+            color: #0097ce;
+            font-size: 1.2em;
+        }
+
+        .contact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-top: 10px;
+        }
+
+        .btn-remove {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .btn-remove:hover {
+            background-color: #ff1a1a;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Atualize seus dados cadastrais conosco</h1>
+        <p class="subtitulo-sescon">Sescon - SP</p>
+        <p class="descricao">Preencha corretamente todas as informações. Os campos de contato são obrigatórios para garantirmos a comunicação eficaz.</p>
+
+        <form id="formulario">
+            <section>
+                <h2>1. Identificação da Empresa</h2>
+                <label for="cnpj">CNPJ:</label>
+                <input type="text" id="cnpj" name="cnpj" readonly placeholder="00.000.000/0000-00">
+
+                <label for="razao">Razão Social:</label>
+                <input type="text" id="razao" name="razao" readonly placeholder="Razão Social da Empresa">
+            </section>
+
+            <section>
+                <h2>2. Contatos</h2>
+                <div class="contact-item">
+                    <label for="email1">Este e-mail receberá os comunicados selecionados abaixo:</label>
+                    <input type="email" id="email1" name="email[]" placeholder="ex: contato@empresa.com" required>
+                    
+                    <label for="telefone1">Telefone:</label>
+                    <input type="tel" id="telefone1" name="telefone[]" placeholder="(DD) 99999-9999" required>
+                    
+                    <label for="departamento1">Departamento:</label>
+                    <select id="departamento1" name="departamento[]" required>
+                        <option value="">Selecione</option>
+                        <option value="Socio">Sócio</option>
+                        <option value="Diretoria">Diretoria</option>
+                        <option value="Recursos Humanos">Recursos Humanos (RH)</option>
+                        <option value="Departamento Pessoal">Departamento Pessoal</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="Contabilidade">Contabilidade</option>
+                        <option value="Juridico">Jurídico</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+
+                    <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
+                    <label style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
+                    
+                    <span id="remove-btn-template" class="btn-remove hidden">Remover</span>
+                </div>
+                <button type="button" class="btn-add">+ Adicionar Contato</button>
+            </section>
+
+            <section>
+                <h2>3. Informações da Empresa</h2>
+                <label for="faturamento">Faturamento Bruto Anual (para cálculo das contribuições):</label>
+                <input type="text" id="faturamento" name="faturamento" placeholder="Ex: R$ 1.200.000,00" required>
+
+                <label for="funcionarios">Quantidade de Funcionários:</label>
+                <input type="number" id="funcionarios" name="funcionarios" placeholder="Ex: 25" min="0" required>
+            </section>
+
+            <button type="submit" class="btn-submit">Enviar Atualização</button>
+            <p class="mensagem-status"></p>
+        </form>
+        <footer><img src="https://i.imgur.com/zWWSzuu.png" alt="Logo Sescon-SP" class="logo"></footer>
+    </div>
+    <script>
+        document.getElementById('formulario').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const statusMsg = document.querySelector('.mensagem-status');
+            statusMsg.style.display = 'block';
+
+            const contactItems = document.querySelectorAll('.contact-item');
+            let allValid = true;
+            for (let i = 0; i < contactItems.length; i++) {
+                if (i < 2) {
+                    const item = contactItems[i];
+                    const email = item.querySelector('input[name="email[]"]');
+                    const telefone = item.querySelector('input[name="telefone[]"]');
+                    const departamento = item.querySelector('select[name="departamento[]"]');
+                    const comunicacoes = item.querySelectorAll('input[name="comunicacoes[]"]:checked');
+
+                    if (!email.value || !telefone.value || !departamento.value || comunicacoes.length === 0) {
+                        statusMsg.textContent = 'Por favor, preencha todos os campos obrigatórios dos 2 primeiros contatos.';
+                        statusMsg.className = 'mensagem-status mensagem-erro';
+                        allValid = false;
+                        return;
+                    }
+                }
+            }
+
+            if (!allValid) {
+                return;
+            }
+
+            statusMsg.textContent = 'Enviando...';
+            
+            const cnpj = document.getElementById('cnpj').value;
+            const razaoSocial = document.getElementById('razao').value;
+            const faturamento = document.getElementById('faturamento').value;
+            const funcionarios = document.getElementById('funcionarios').value;
+
+            const contatos = [];
+            document.querySelectorAll('.contact-item').forEach(item => {
+                contatos.push({
+                    email: item.querySelector('input[name="email[]"]').value,
+                    telefone: item.querySelector('input[name="telefone[]"]').value,
+                    departamento: item.querySelector('select[name="departamento[]"]').value,
+                    preferencias: Array.from(item.querySelectorAll('input[name="comunicacoes[]"]:checked')).map(el => el.value)
+                });
+            });
+
+            const payload = { cnpj, razaoSocial, faturamento, funcionarios, contatos };
+
+            fetch('COLE_AQUI_A_SUA_NOVA_URL', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                statusMsg.textContent = '✔ Dados enviados com sucesso!';
+                statusMsg.className = 'mensagem-status mensagem-sucesso';
+            })
+            .catch(error => {
+                statusMsg.textContent = '❌ Ocorreu um erro. Tente novamente.';
+                statusMsg.className = 'mensagem-status mensagem-erro';
+            });
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('cnpj')) document.getElementById('cnpj').value = urlParams.get('cnpj');
+        if (urlParams.has('razaoSocial')) document.getElementById('razao').value = urlParams.get('razaoSocial');
+
+        function applyPhoneMask(element) {
+            element.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                let formattedValue = '';
+                if (value.length > 0) {
+                    formattedValue = `(${value.substring(0, 2)}`;
+                }
+                if (value.length > 2) {
+                    if (value.length > 10) { // Celular
+                         formattedValue += `) ${value.substring(2, 7)}`;
+                         if (value.length > 7) {
+                            formattedValue += `-${value.substring(7, 11)}`;
+                         }
+                    } else { // Fixo
+                        formattedValue += `) ${value.substring(2, 6)}`;
+                        if (value.length > 6) {
+                            formattedValue += `-${value.substring(6, 10)}`;
+                        }
+                    }
+                }
+                e.target.value = formattedValue;
+            });
+        }
+
+        function applyCurrencyMask(element) {
+            element.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                let formattedValue = '';
+                if (value.length > 0) {
+                    formattedValue = (parseInt(value, 10) / 100).toLocaleString('pt-BR', {
+                        minimumFractionDigits: 2,
+                        style: 'currency',
+                        currency: 'BRL'
+                    });
+                }
+                e.target.value = formattedValue;
+            });
+        }
+
+        applyPhoneMask(document.querySelector('input[name="telefone[]"]'));
+        applyCurrencyMask(document.getElementById('faturamento'));
+
+        document.querySelector('.btn-add').addEventListener('click', function() {
+            const contactCount = document.querySelectorAll('.contact-item').length;
+            const contactSection = document.querySelector('.contact-item');
+            const newContactItem = contactSection.cloneNode(true);
+            
+            const removeButton = newContactItem.querySelector('.btn-remove');
+            removeButton.addEventListener('click', function() {
+                const parentSection = this.closest('section');
+                const headerToRemove = this.closest('.contact-header');
+                const itemToRemove = headerToRemove.nextElementSibling;
+
+                if (headerToRemove) headerToRemove.remove();
+                if (itemToRemove) itemToRemove.remove();
+            });
+            
+            if (contactCount >= 2) {
+                removeButton.classList.remove('hidden');
+            }
+
+            const newHeader = document.createElement('div');
+            newHeader.className = 'contact-header';
+            
+            const newTitle = document.createElement('h2');
+            newTitle.className = 'contact-title';
+            newTitle.textContent = `Contato ${contactCount + 1}`;
+            
+            newHeader.appendChild(newTitle);
+            
+            if (contactCount >= 2) {
+                newHeader.appendChild(removeButton);
+            }
+
+            this.parentNode.insertBefore(newHeader, this);
+            this.parentNode.insertBefore(newContactItem, this);
+
+            newContactItem.querySelectorAll('input, select').forEach(element => {
+                element.required = false;
+                if (element.type === 'checkbox') {
+                    element.checked = false;
+                } else {
+                    element.value = '';
+                }
+            });
+
+            const newPhoneInput = newContactItem.querySelector('input[name="telefone[]"]');
+            applyPhoneMask(newPhoneInput);
+        });
+    </script>
+</body>
+</html>

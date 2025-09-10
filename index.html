@@ -303,28 +303,35 @@
             const statusMsg = document.querySelector('.mensagem-status');
             statusMsg.style.display = 'block';
 
-            // --- INÍCIO DA VALIDAÇÃO DE DUPLICATAS ---
-            const emails = Array.from(document.querySelectorAll('input[name="email[]"]'))
-                                .map(input => input.value.trim().toLowerCase())
-                                .filter(email => email !== ''); // Ignora campos vazios
-            
-            const telefones = Array.from(document.querySelectorAll('input[name="telefone[]"]'))
-                                  .map(input => input.value.replace(/\D/g, '')) // Pega só os números
-                                  .filter(tel => tel !== ''); // Ignora campos vazios
+            // --- INÍCIO DA VALIDAÇÃO DE DUPLICATAS (VERSÃO CORRIGIDA) ---
+            function checkForDuplicates() {
+                const emails = Array.from(document.querySelectorAll('input[name="email[]"]'))
+                                    .map(input => input.value.trim().toLowerCase())
+                                    .filter(email => email !== '');
+                
+                const telefones = Array.from(document.querySelectorAll('input[name="telefone[]"]'))
+                                      .map(input => input.value.replace(/\D/g, ''))
+                                      .filter(tel => tel !== '');
 
-            const hasDuplicateEmails = new Set(emails).size !== emails.length;
-            const hasDuplicatePhones = new Set(telefones).size !== telefones.length;
+                const hasDuplicateEmails = new Set(emails).size !== emails.length;
+                if (hasDuplicateEmails) {
+                    statusMsg.textContent = 'Existem e-mails repetidos. Por favor, insira um e-mail único para cada contato.';
+                    statusMsg.className = 'mensagem-status mensagem-erro';
+                    return false; // Indica que a validação falhou
+                }
 
-            if (hasDuplicateEmails) {
-                statusMsg.textContent = 'Existem e-mails repetidos. Por favor, insira um e-mail único para cada contato.';
-                statusMsg.className = 'mensagem-status mensagem-erro';
-                return;
+                const hasDuplicatePhones = new Set(telefones).size !== telefones.length;
+                if (hasDuplicatePhones) {
+                    statusMsg.textContent = 'Existem telefones repetidos. Por favor, insira um telefone único para cada contato.';
+                    statusMsg.className = 'mensagem-status mensagem-erro';
+                    return false; // Indica que a validação falhou
+                }
+
+                return true; // Indica que a validação passou
             }
 
-            if (hasDuplicatePhones) {
-                statusMsg.textContent = 'Existem telefones repetidos. Por favor, insira um telefone único para cada contato.';
-                statusMsg.className = 'mensagem-status mensagem-erro';
-                return;
+            if (!checkForDuplicates()) {
+                return; // Para o envio se houver duplicatas
             }
             // --- FIM DA VALIDAÇÃO DE DUPLICATAS ---
 
@@ -381,7 +388,7 @@
                 redirect: 'follow'
             })
             .then(res => {
-                statusMsg.textContent = '✔ Dados enviados com sucesso!';
+                statusMsg.textContent = '✅ Dados enviados com sucesso!📩';
                 statusMsg.className = 'mensagem-status mensagem-sucesso';
                 document.getElementById('formulario').reset();
             })

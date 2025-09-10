@@ -303,6 +303,31 @@
             const statusMsg = document.querySelector('.mensagem-status');
             statusMsg.style.display = 'block';
 
+            // --- INÍCIO DA VALIDAÇÃO DE DUPLICATAS ---
+            const emails = Array.from(document.querySelectorAll('input[name="email[]"]'))
+                                .map(input => input.value.trim().toLowerCase())
+                                .filter(email => email !== ''); // Ignora campos vazios
+            
+            const telefones = Array.from(document.querySelectorAll('input[name="telefone[]"]'))
+                                  .map(input => input.value.replace(/\D/g, '')) // Pega só os números
+                                  .filter(tel => tel !== ''); // Ignora campos vazios
+
+            const hasDuplicateEmails = new Set(emails).size !== emails.length;
+            const hasDuplicatePhones = new Set(telefones).size !== telefones.length;
+
+            if (hasDuplicateEmails) {
+                statusMsg.textContent = 'Existem e-mails repetidos. Por favor, insira um e-mail único para cada contato.';
+                statusMsg.className = 'mensagem-status mensagem-erro';
+                return;
+            }
+
+            if (hasDuplicatePhones) {
+                statusMsg.textContent = 'Existem telefones repetidos. Por favor, insira um telefone único para cada contato.';
+                statusMsg.className = 'mensagem-status mensagem-erro';
+                return;
+            }
+            // --- FIM DA VALIDAÇÃO DE DUPLICATAS ---
+
             const contactItems = document.querySelectorAll('.contact-item');
             let allValid = true;
             for (let i = 0; i < 2; i++) {
@@ -413,16 +438,13 @@
         document.querySelectorAll('input[name="telefone[]"]').forEach(applyPhoneMask);
         applyCurrencyMask(document.getElementById('faturamento'));
 
-        // --- INÍCIO DA ALTERAÇÃO ---
         document.querySelector('.btn-add').addEventListener('click', function() {
             const contactSection = document.getElementById('contact-section');
             const contactCount = contactSection.querySelectorAll('.contact-item').length;
             
-            // Pega o primeiro item de contato como um modelo
             const contactTemplate = contactSection.querySelector('.contact-item');
             const newContactItem = contactTemplate.cloneNode(true);
             
-            // Limpa os valores e remove o 'required' dos campos clonados
             newContactItem.querySelectorAll('input, select').forEach(element => {
                 element.required = false;
                 if (element.type === 'checkbox') {
@@ -430,17 +452,14 @@
                 } else {
                     element.value = '';
                 }
-                // Limpa IDs para evitar duplicatas
                 element.id = ''; 
             });
 
-            // Corrige o título do bloco clonado
             const titleElement = newContactItem.querySelector('.contact-title');
             if (titleElement) {
                 titleElement.textContent = `Contato ${contactCount + 1}`;
             }
 
-            // Adiciona o botão de remover
             const removeButton = document.createElement('span');
             removeButton.className = 'btn-remove';
             removeButton.textContent = 'Remover';
@@ -448,20 +467,16 @@
                 newContactItem.remove();
             };
             
-            // Adiciona o botão de remover ao cabeçalho do novo item
             const header = newContactItem.querySelector('.contact-header');
             if (header) {
                 header.appendChild(removeButton);
             }
 
-            // Insere o novo item de contato antes do botão "+ Adicionar Contato"
             contactSection.insertBefore(newContactItem, this);
 
-            // Aplica a máscara de telefone ao novo campo
             const newPhoneInput = newContactItem.querySelector('input[name="telefone[]"]');
             applyPhoneMask(newPhoneInput);
         });
-        // --- FIM DA ALTERAÇÃO ---
     </script>
 </body>
 </html>

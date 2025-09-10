@@ -203,7 +203,7 @@
     <div class="container">
         <h1>Atualize seus dados cadastrais conosco</h1>
         <p class="subtitulo-sescon">Sescon - SP</p>
-        <p class="descricao">Preencha corretamente todas as informações. Os campos de contato são obrigatórios para garantirmos a comunicação eficaz.</p>
+        <p class="descricao">Preencha corretamente todas as informações. Pelo menos um contato é obrigatório para garantirmos a comunicação eficaz.</p>
 
         <form id="formulario">
             <section>
@@ -218,6 +218,7 @@
             <section id="contact-section">
                 <h2>2. Contatos</h2>
                 
+                <!-- INÍCIO DA ALTERAÇÃO: APENAS UM BLOCO DE CONTATO INICIAL -->
                 <div class="contact-item">
                     <div class="contact-header">
                         <h2 class="contact-title">Contato 1 (Obrigatório)</h2>
@@ -248,37 +249,7 @@
                     <label><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
                     <label style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
                 </div>
-
-                <div class="contact-item">
-                    <div class="contact-header">
-                        <h2 class="contact-title">Contato 2 (Obrigatório)</h2>
-                    </div>
-                    <label for="email2">Este e-mail receberá os comunicados selecionados abaixo:</label>
-                    <input type="email" id="email2" name="email[]" placeholder="ex: financeiro@empresa.com" required>
-                    
-                    <label for="telefone2">Telefone:</label>
-                    <input type="tel" id="telefone2" name="telefone[]" placeholder="(DD) 98888-8888" required>
-                    
-                    <label for="departamento2">Departamento:</label>
-                    <select id="departamento2" name="departamento[]" required>
-                        <option value="">Selecione</option>
-                        <option value="Socio">Sócio</option>
-                        <option value="Diretoria">Diretoria</option>
-                        <option value="Recursos Humanos">Recursos Humanos (RH)</option>
-                        <option value="Departamento Pessoal">Departamento Pessoal</option>
-                        <option value="Financeiro">Financeiro</option>
-                        <option value="Contabilidade">Contabilidade</option>
-                        <option value="Juridico">Jurídico</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Outros">Outros</option>
-                    </select>
-
-                    <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
-                    <label><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
-                    <label><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
-                    <label><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
-                    <label style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
-                </div>
+                <!-- FIM DA ALTERAÇÃO -->
                 
                 <button type="button" class="btn-add">+ Adicionar Contato</button>
             </section>
@@ -303,7 +274,6 @@
             const statusMsg = document.querySelector('.mensagem-status');
             statusMsg.style.display = 'block';
 
-            // --- INÍCIO DA VALIDAÇÃO DE DUPLICATAS (VERSÃO CORRIGIDA) ---
             function checkForDuplicates() {
                 const emails = Array.from(document.querySelectorAll('input[name="email[]"]'))
                                     .map(input => input.value.trim().toLowerCase())
@@ -313,48 +283,37 @@
                                       .map(input => input.value.replace(/\D/g, ''))
                                       .filter(tel => tel !== '');
 
-                const hasDuplicateEmails = new Set(emails).size !== emails.length;
-                if (hasDuplicateEmails) {
+                if (new Set(emails).size !== emails.length) {
                     statusMsg.textContent = 'Existem e-mails repetidos. Por favor, insira um e-mail único para cada contato.';
                     statusMsg.className = 'mensagem-status mensagem-erro';
-                    return false; // Indica que a validação falhou
+                    return false;
                 }
 
-                const hasDuplicatePhones = new Set(telefones).size !== telefones.length;
-                if (hasDuplicatePhones) {
+                if (new Set(telefones).size !== telefones.length) {
                     statusMsg.textContent = 'Existem telefones repetidos. Por favor, insira um telefone único para cada contato.';
                     statusMsg.className = 'mensagem-status mensagem-erro';
-                    return false; // Indica que a validação falhou
+                    return false;
                 }
-
-                return true; // Indica que a validação passou
+                return true;
             }
 
             if (!checkForDuplicates()) {
-                return; // Para o envio se houver duplicatas
-            }
-            // --- FIM DA VALIDAÇÃO DE DUPLICATAS ---
-
-            const contactItems = document.querySelectorAll('.contact-item');
-            let allValid = true;
-            for (let i = 0; i < 2; i++) {
-                const item = contactItems[i];
-                const email = item.querySelector('input[name="email[]"]');
-                const telefone = item.querySelector('input[name="telefone[]"]');
-                const departamento = item.querySelector('select[name="departamento[]"]');
-                const comunicacoes = item.querySelectorAll('input[name="comunicacoes[]"]:checked');
-
-                if (!email.value || !telefone.value || !departamento.value || comunicacoes.length === 0) {
-                    statusMsg.textContent = `Por favor, preencha todos os campos obrigatórios do Contato ${i + 1}.`;
-                    statusMsg.className = 'mensagem-status mensagem-erro';
-                    allValid = false;
-                    break;
-                }
-            }
-
-            if (!allValid) {
                 return;
             }
+
+            // --- INÍCIO DA ALTERAÇÃO: VALIDAR APENAS O PRIMEIRO CONTATO ---
+            const firstContact = document.querySelector('.contact-item');
+            const email = firstContact.querySelector('input[name="email[]"]');
+            const telefone = firstContact.querySelector('input[name="telefone[]"]');
+            const departamento = firstContact.querySelector('select[name="departamento[]"]');
+            const comunicacoes = firstContact.querySelectorAll('input[name="comunicacoes[]"]:checked');
+
+            if (!email.value || !telefone.value || !departamento.value || comunicacoes.length === 0) {
+                statusMsg.textContent = `Por favor, preencha todos os campos obrigatórios do Contato 1.`;
+                statusMsg.className = 'mensagem-status mensagem-erro';
+                return; // Para o envio se o primeiro contato não for válido
+            }
+            // --- FIM DA ALTERAÇÃO ---
 
             statusMsg.textContent = 'Enviando...';
             
@@ -376,7 +335,6 @@
             });
 
             const payload = { cnpj, razaoSocial, faturamento, funcionarios, contatos };
-
             const url = 'https://script.google.com/macros/s/AKfycbyFhcr08k3J2TCRjaVSYycKh33xS9iNyTYz5PaeGNNQWhhFXjvHDB88ZXdSJ-MIbPMK/exec';
 
             fetch(url, {
@@ -476,6 +434,9 @@
             
             const header = newContactItem.querySelector('.contact-header');
             if (header) {
+                // Limpa o cabeçalho clonado antes de adicionar os novos elementos
+                header.innerHTML = ''; 
+                header.appendChild(titleElement);
                 header.appendChild(removeButton);
             }
 

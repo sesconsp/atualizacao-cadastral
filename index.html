@@ -257,7 +257,7 @@
             })).filter(c => c.nome);
 
             const payload = { cnpj, razaoSocial, faturamento, funcionarios, contatos, socios, colaboradores };
-            const url = 'SUA_URL_DO_APPS_SCRIPT_AQUI'; // <-- NÃO ESQUEÇA DE COLAR SUA NOVA URL AQUI
+            const url = 'https://script.google.com/macros/s/AKfycbx4G9bx-ltjNPa-sif1jKLV9QoM2kxqs204xeL_BLyICk-smAtweDhj1k68xs5S43zLJA/exec'; // <-- NÃO ESQUEÇA DE COLAR SUA NOVA URL AQUI
 
             fetch(url, {
                 method: 'POST', mode: 'no-cors', cache: 'no-cache',
@@ -265,7 +265,7 @@
                 body: JSON.stringify(payload), redirect: 'follow'
             })
             .then(res => {
-                statusMsg.textContent = '✔ Dados enviados com sucesso!';
+                statusMsg.textContent = '✅ Dados enviados com sucesso!📩';
                 statusMsg.className = 'mensagem-status mensagem-sucesso';
                 document.getElementById('formulario').reset();
                 document.getElementById('optional-section').classList.add('hidden');

@@ -73,12 +73,14 @@
                 <h2>3. Sócios e Colaboradores (Opcional)</h2>
                 <button type="button" class="btn-reveal" id="reveal-button">Deseja atualizar sócios ou colaboradores? Clique aqui</button>
                 <div id="optional-section" class="hidden">
-                    <div id="socios-container" class="item-block">
-                        <h3>Sócios</h3>
+                    <div id="socios-container">
+                        <div class="item-header" style="margin-top: 15px;"><h3>Sócios</h3></div>
+                        <!-- Novos sócios serão adicionados aqui -->
                         <button type="button" class="btn-add" onclick="addSocio()">+ Adicionar Sócio</button>
                     </div>
                     <div id="colaboradores-container" class="item-block">
-                        <h3>Colaboradores</h3>
+                        <div class="item-header"><h3>Colaboradores</h3></div>
+                        <!-- Novos colaboradores serão adicionados aqui -->
                         <button type="button" class="btn-add" onclick="addColaborador()">+ Adicionar Colaborador</button>
                     </div>
                 </div>
@@ -104,9 +106,46 @@
             this.classList.add('hidden');
         });
 
-        function applyPhoneMask(element) { /* ...código da máscara de telefone... */ }
-        function applyCurrencyMask(element) { /* ...código da máscara de faturamento... */ }
-        function applyCpfMask(element) { /* ...código da máscara de CPF... */ }
+        function applyPhoneMask(element) {
+            element.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                let formattedValue = '';
+                if (value.length > 0) { formattedValue = `(${value.substring(0, 2)}`; }
+                if (value.length > 2) {
+                    if (value.length > 10) {
+                         formattedValue += `) ${value.substring(2, 7)}`;
+                         if (value.length > 7) { formattedValue += `-${value.substring(7, 11)}`; }
+                    } else {
+                        formattedValue += `) ${value.substring(2, 6)}`;
+                        if (value.length > 6) { formattedValue += `-${value.substring(6, 10)}`; }
+                    }
+                }
+                e.target.value = formattedValue;
+            });
+        }
+
+        function applyCurrencyMask(element) {
+            element.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                let formattedValue = '';
+                if (value.length > 0) {
+                    formattedValue = (parseInt(value, 10) / 100).toLocaleString('pt-BR', {
+                        minimumFractionDigits: 2, style: 'currency', currency: 'BRL'
+                    });
+                }
+                e.target.value = formattedValue;
+            });
+        }
+
+        function applyCpfMask(element) {
+            element.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '').substring(0, 11);
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                e.target.value = value;
+            });
+        }
 
         function addContact() {
             const container = document.getElementById('contact-section');
@@ -175,6 +214,8 @@
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('cnpj')) document.getElementById('cnpj').value = urlParams.get('cnpj');
         if (urlParams.has('razaoSocial')) document.getElementById('razao').value = urlParams.get('razaoSocial');
+        
+        // Ativa as máscaras nos campos iniciais
         document.querySelectorAll('input[name="telefone[]"]').forEach(applyPhoneMask);
         applyCurrencyMask(document.getElementById('faturamento'));
     </script>

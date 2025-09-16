@@ -222,40 +222,51 @@
             }
         }
 
-        document.getElementById('formulario').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const statusMsg = document.querySelector('.mensagem-status');
-            statusMsg.style.display = 'block';
-            const firstContact = document.querySelector('.contact-item');
-            if (!firstContact.querySelector('input[name="email[]"]').value || !firstContact.querySelector('input[name="telefone[]"]').value) {
-                statusMsg.textContent = 'Por favor, preencha pelo menos o e-mail e telefone do Contato 1.';
-                statusMsg.className = 'mensagem-status mensagem-erro';
-                return;
-            }
-            statusMsg.textContent = 'Enviando...';
-            statusMsg.className = 'mensagem-status';
-            const payload = {
-                cnpj: document.getElementById('cnpj').value,
-                razaoSocial: document.getElementById('razao').value,
-                faturamento: document.getElementById('faturamento').value,
-                funcionarios: document.getElementById('funcionarios').value,
-                contatos: Array.from(document.querySelectorAll('.contact-item')).map(item => ({ email: item.querySelector('input[name="email[]"]').value, telefone: item.querySelector('input[name="telefone[]"]').value, departamento: item.querySelector('select[name="departamento[]"]').value, preferencias: Array.from(item.querySelectorAll('input[name="comunicacoes[]"]:checked')).map(el => el.value) })).filter(c => c.email),
-                socios: Array.from(document.querySelectorAll('#socios-container .item-block')).map(item => ({ nome: item.querySelector('input[name="socio_nome[]"]').value, cpf: item.querySelector('input[name="socio_cpf[]"]').value, data: item.querySelector('input[name="socio_data[]"]').value })).filter(s => s.nome),
-                colaboradores: Array.from(document.querySelectorAll('#colaboradores-container .item-block')).map(item => ({ nome: item.querySelector('input[name="colaborador_nome[]"]').value, cpf: item.querySelector('input[name="colaborador_cpf[]"]').value, data: item.querySelector('input[name="colaborador_data[]"]').value })).filter(c => c.nome)
-            };
-            const url = 'SUA_URL_DO_APPS_SCRIPT_AQUI';
-            fetch(url, { method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), redirect: 'follow' })
-            .then(res => {
-                statusMsg.textContent = '✅ Dados enviados com sucesso!📩';
-                statusMsg.className = 'mensagem-status mensagem-sucesso';
-                document.getElementById('formulario').reset();
-                document.getElementById('optional-section').classList.add('hidden');
-                document.getElementById('reveal-button').classList.remove('hidden');
-            }).catch(error => {
-                statusMsg.textContent = '❌ Ocorreu um erro. Tente novamente.';
-                statusMsg.className = 'mensagem-status mensagem-erro';
-            });
-        });
+        // SUBSTITUA A FUNÇÃO DE SUBMIT PELA VERSÃO ABAIXO NO SEU index.html
+
+document.getElementById('formulario').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const statusMsg = document.querySelector('.mensagem-status');
+    statusMsg.style.display = 'block';
+    const firstContact = document.querySelector('.contact-item');
+    if (!firstContact.querySelector('input[name="email[]"]').value || !firstContact.querySelector('input[name="telefone[]"]').value) {
+        statusMsg.textContent = 'Por favor, preencha pelo menos o e-mail e telefone do Contato 1.';
+        statusMsg.className = 'mensagem-status mensagem-erro';
+        return;
+    }
+    statusMsg.textContent = 'Enviando...';
+    statusMsg.className = 'mensagem-status';
+
+    // ===== CORREÇÃO AQUI =====
+    // Pega o valor do CNPJ e remove a máscara antes de enviar
+    const cnpjValue = document.getElementById('cnpj').value.replace(/\D/g, '');
+    // =========================
+
+    const payload = {
+        // ===== CORREÇÃO AQUI =====
+        cnpj: cnpjValue, // Usa o valor sem máscara
+        // =========================
+        razaoSocial: document.getElementById('razao').value,
+        faturamento: document.getElementById('faturamento').value,
+        funcionarios: document.getElementById('funcionarios').value,
+        contatos: Array.from(document.querySelectorAll('.contact-item')).map(item => ({ email: item.querySelector('input[name="email[]"]').value, telefone: item.querySelector('input[name="telefone[]"]').value, departamento: item.querySelector('select[name="departamento[]"]').value, preferencias: Array.from(item.querySelectorAll('input[name="comunicacoes[]"]:checked')).map(el => el.value) })).filter(c => c.email),
+        socios: Array.from(document.querySelectorAll('#socios-container .item-block')).map(item => ({ nome: item.querySelector('input[name="socio_nome[]"]').value, cpf: item.querySelector('input[name="socio_cpf[]"]').value, data: item.querySelector('input[name="socio_data[]"]').value })).filter(s => s.nome),
+        colaboradores: Array.from(document.querySelectorAll('#colaboradores-container .item-block')).map(item => ({ nome: item.querySelector('input[name="colaborador_nome[]"]').value, cpf: item.querySelector('input[name="colaborador_cpf[]"]').value, data: item.querySelector('input[name="colaborador_data[]"]').value })).filter(c => c.nome)
+    };
+    const url = 'https://script.google.com/macros/s/AKfycbz_iWAlH4-4x5r6nYxRptYFlKsCXMQW_Q5ED9ejkAqm2mQ1T3559Zkz8P7wso8dAVB5/exec';
+    fetch(url, { method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), redirect: 'follow' })
+    .then(res => {
+        statusMsg.textContent = '✅ Dados enviados com sucesso!📩';
+        statusMsg.className = 'mensagem-status mensagem-sucesso';
+        document.getElementById('formulario').reset();
+        document.getElementById('optional-section').classList.add('hidden');
+        document.getElementById('reveal-button').classList.remove('hidden');
+    }).catch(error => {
+        statusMsg.textContent = '❌ Ocorreu um erro. Tente novamente.';
+        statusMsg.className = 'mensagem-status mensagem-erro';
+    });
+});
+
 
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('cnpj')) {

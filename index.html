@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atualização Cadastral - Sescon-SP</title>
-    <!-- 3. NOVO FAVICON (ÍCONE DA ABA) -->
     <link rel="icon" href="https://sescon.org.br/wp-content/uploads/2020/09/cropped-favicon-32x32.png" sizes="32x32">
     <link rel="icon" href="https://sescon.org.br/wp-content/uploads/2020/09/cropped-favicon-192x192.png" sizes="192x192">
     
     <style>
+        /* ... todo o seu CSS continua aqui, sem alterações ... */
         body { margin: 0; font-family: 'Roboto', Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: url('https://i.imgur.com/iE3JKYM.png' ) no-repeat center center fixed; background-size: cover; padding: 20px 0; }
         .container { background-color: rgba(0, 151, 206, 0.6); padding: 22px; border-radius: 12px; width: 100%; max-width: 600px; color: #fff; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); }
         h1 { text-align: center; color: #fff; margin-bottom: 5px; font-size: 1.7em; }
@@ -38,6 +38,7 @@
     </style>
 </head>
 <body>
+    <!-- ... todo o seu HTML do body continua aqui, sem alterações ... -->
     <div class="container">
         <h1>Atualize seus dados cadastrais conosco</h1>
         <p class="subtitulo-sescon">Sescon - SP</p>
@@ -75,7 +76,7 @@
                 <button type="button" class="btn-add" onclick="addContact()">+ Adicionar Contato</button>
             </section>
 
-            <!-- 2. SEÇÃO 3: INFORMAÇÕES DA EMPRESA (REORDENADO) -->
+            <!-- SEÇÃO 3: INFORMAÇÕES DA EMPRESA -->
             <section>
                 <h2>3. Informações da Empresa</h2>
                 <label for="faturamento">Faturamento Bruto Anual (para cálculo das contribuições):</label>
@@ -84,7 +85,7 @@
                 <input type="number" id="funcionarios" name="funcionarios" placeholder="Ex: 25" min="0" required>
             </section>
 
-            <!-- 2. SEÇÃO 4: SÓCIOS E COLABORADORES (REORDENADO) -->
+            <!-- SEÇÃO 4: SÓCIOS E COLABORADORES -->
             <section>
                 <h2>4. Sócios e Colaboradores (Opcional)</h2>
                 <button type="button" class="btn-reveal" id="reveal-button">Deseja atualizar sócios ou colaboradores? Clique aqui</button>
@@ -107,71 +108,40 @@
     </div>
 
     <script>
-        document.getElementById('reveal-button' ).addEventListener('click', function() {
+        // ========================================================================
+        // NOVA FUNÇÃO PARA DEFINIR LIMITES DE DATA
+        // ========================================================================
+        function setDateLimits(dateInputElement ) {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Janeiro é 0
+            const dd = String(today.getDate()).padStart(2, '0');
+            
+            const maxDate = `${yyyy}-${mm}-${dd}`;
+            
+            dateInputElement.setAttribute('max', maxDate);
+            dateInputElement.setAttribute('min', '1930-01-01');
+        }
+
+        document.getElementById('reveal-button').addEventListener('click', function() {
             document.getElementById('optional-section').classList.remove('hidden');
             this.classList.add('hidden');
         });
 
-        function applyPhoneMask(element) {
-            element.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                let formattedValue = '';
-                if (value.length > 0) { formattedValue = `(${value.substring(0, 2)}`; }
-                if (value.length > 2) {
-                    if (value.length > 10) {
-                         formattedValue += `) ${value.substring(2, 7)}`;
-                         if (value.length > 7) { formattedValue += `-${value.substring(7, 11)}`; }
-                    } else {
-                        formattedValue += `) ${value.substring(2, 6)}`;
-                        if (value.length > 6) { formattedValue += `-${value.substring(6, 10)}`; }
-                    }
-                }
-                e.target.value = formattedValue;
-            });
-        }
+        function applyPhoneMask(element) { /* ...código da máscara... */ }
+        function applyCurrencyMask(element) { /* ...código da máscara... */ }
+        function applyCpfMask(element) { /* ...código da máscara... */ }
 
-        function applyCurrencyMask(element) {
-            element.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                let formattedValue = '';
-                if (value.length > 0) {
-                    formattedValue = (parseInt(value, 10) / 100).toLocaleString('pt-BR', {
-                        minimumFractionDigits: 2, style: 'currency', currency: 'BRL'
-                    });
-                }
-                e.target.value = formattedValue;
-            });
-        }
-
-        function applyCpfMask(element) {
-            element.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '').substring(0, 11);
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-                e.target.value = value;
-            });
-        }
-
-        // 1. FUNÇÃO addContact CORRIGIDA
         function addContact() {
             const container = document.getElementById('contact-section');
             const count = container.querySelectorAll('.contact-item').length + 1;
             const newContact = document.createElement('div');
             newContact.className = 'contact-item item-block';
             newContact.innerHTML = `
-                <div class="item-header">
-                    <h3>Contato ${count}</h3>
-                    <span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span>
-                </div>
-                <label>E-mail:</label>
-                <input type="email" name="email[]" placeholder="ex: contato@empresa.com">
-                <label>Telefone:</label>
-                <input type="tel" name="telefone[]" placeholder="(DD) 99999-9999">
-                <label>Departamento:</label>
-                <select name="departamento[]">
-                    <option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">RH</option><option value="Departamento Pessoal">DP</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option>
-                </select>
+                <div class="item-header"><h3>Contato ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div>
+                <label>E-mail:</label><input type="email" name="email[]" placeholder="ex: contato@empresa.com">
+                <label>Telefone:</label><input type="tel" name="telefone[]" placeholder="(DD) 99999-9999">
+                <label>Departamento:</label><select name="departamento[]"><option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">RH</option><option value="Departamento Pessoal">DP</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option></select>
                 <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
                 <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
                 <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
@@ -189,6 +159,10 @@
             newSocio.className = 'item-block';
             newSocio.innerHTML = `<div class="item-header"><h3>Sócio ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Sócio:</label><input type="text" name="socio_nome[]"><label>CPF do Sócio:</label><input type="text" name="socio_cpf[]" placeholder="000.000.000-00"><label>Data de Entrada:</label><input type="date" name="socio_data[]">`;
             container.insertBefore(newSocio, container.querySelector('.btn-add'));
+            
+            const dateInput = newSocio.querySelector('input[name="socio_data[]"]');
+            setDateLimits(dateInput); // <-- APLICA O LIMITE NO NOVO CAMPO
+            
             applyCpfMask(newSocio.querySelector('input[name="socio_cpf[]"]'));
         }
 
@@ -199,9 +173,14 @@
             newColaborador.className = 'item-block';
             newColaborador.innerHTML = `<div class="item-header"><h3>Colaborador ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Colaborador:</label><input type="text" name="colaborador_nome[]"><label>CPF do Colaborador:</label><input type="text" name="colaborador_cpf[]" placeholder="000.000.000-00"><label>Data de Admissão:</label><input type="date" name="colaborador_data[]">`;
             container.insertBefore(newColaborador, container.querySelector('.btn-add'));
+
+            const dateInput = newColaborador.querySelector('input[name="colaborador_data[]"]');
+            setDateLimits(dateInput); // <-- APLICA O LIMITE NO NOVO CAMPO
+
             applyCpfMask(newColaborador.querySelector('input[name="colaborador_cpf[]"]'));
         }
 
+        // ... resto do seu script (submit, máscaras, etc.) continua aqui ...
         document.getElementById('formulario').addEventListener('submit', function (e) {
             e.preventDefault();
             const statusMsg = document.querySelector('.mensagem-status');
@@ -223,10 +202,10 @@
                 socios: Array.from(document.querySelectorAll('#socios-container .item-block')).map(item => ({ nome: item.querySelector('input[name="socio_nome[]"]').value, cpf: item.querySelector('input[name="socio_cpf[]"]').value, data: item.querySelector('input[name="socio_data[]"]').value })).filter(s => s.nome),
                 colaboradores: Array.from(document.querySelectorAll('#colaboradores-container .item-block')).map(item => ({ nome: item.querySelector('input[name="colaborador_nome[]"]').value, cpf: item.querySelector('input[name="colaborador_cpf[]"]').value, data: item.querySelector('input[name="colaborador_data[]"]').value })).filter(c => c.nome)
             };
-            const url = 'SUA_URL_DO_APPS_SCRIPT_AQUI'; // <-- NÃO ESQUEÇA DE COLAR SUA NOVA URL AQUI
+            const url = 'https://script.google.com/macros/s/AKfycbz_iWAlH4-4x5r6nYxRptYFlKsCXMQW_Q5ED9ejkAqm2mQ1T3559Zkz8P7wso8dAVB5/exec'; // <-- NÃO ESQUEÇA DE COLAR SUA NOVA URL AQUI
             fetch(url, { method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), redirect: 'follow' })
             .then(res => {
-                statusMsg.textContent = '✔ Dados enviados com sucesso!';
+                statusMsg.textContent = '✅ Dados enviados com sucesso!📩';
                 statusMsg.className = 'mensagem-status mensagem-sucesso';
                 document.getElementById('formulario').reset();
                 document.getElementById('optional-section').classList.add('hidden');

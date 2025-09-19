@@ -372,9 +372,46 @@
             
             const phoneInput = newContact.querySelector('input[name="telefone[]"]');
             const emailInput = newContact.querySelector('input[name="email[]"]');
+            const departmentSelect = newContact.querySelector('select[name="departamento[]"]');
+            const communicationCheckboxes = newContact.querySelectorAll('input[name="comunicacoes[]"]');
             
             applyPhoneMask(phoneInput);
             applyEmailValidation(emailInput, count - 1);
+            
+            // Adicionar validação em tempo real para departamento e comunicação
+            emailInput.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    departmentSelect.addEventListener('change', validateDepartmentAndCommunication);
+                    communicationCheckboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', validateDepartmentAndCommunication);
+                    });
+                }
+            });
+            
+            function validateDepartmentAndCommunication() {
+                const contact = newContact;
+                const email = emailInput.value.trim();
+                
+                if (email) {
+                    // Validar departamento
+                    if (!departmentSelect.value) {
+                        departmentSelect.classList.add('input-error');
+                    } else {
+                        departmentSelect.classList.remove('input-error');
+                        const errorElement = contact.querySelector('.department-error');
+                        if (errorElement) errorElement.style.display = 'none';
+                    }
+                    
+                    // Validar comunicação
+                    const checkedBoxes = contact.querySelectorAll('input[name="comunicacoes[]"]:checked');
+                    if (checkedBoxes.length === 0) {
+                        // Adicionar indicação visual se necessário
+                    } else {
+                        const errorElement = contact.querySelector('.communication-error');
+                        if (errorElement) errorElement.style.display = 'none';
+                    }
+                }
+            }
         }
 
         function updateContactIndexes() {
@@ -470,6 +507,52 @@
                     let errorElement = parentBlock.querySelector('.name-error');
                     if (errorElement) errorElement.style.display = 'block';
                     isValid = false;
+                }
+            });
+            
+            // Validar campos obrigatórios para contatos com email preenchido
+            const contactItems = document.querySelectorAll('.contact-item');
+            contactItems.forEach((contact, index) => {
+                const emailInput = contact.querySelector('input[name="email[]"]');
+                const departmentSelect = contact.querySelector('select[name="departamento[]"]');
+                const communicationCheckboxes = contact.querySelectorAll('input[name="comunicacoes[]"]:checked');
+                
+                // Se o email estiver preenchido, departamento e comunicação são obrigatórios
+                if (emailInput && emailInput.value.trim()) {
+                    // Validar departamento
+                    if (!departmentSelect.value) {
+                        departmentSelect.classList.add('input-error');
+                        let errorElement = contact.querySelector('.department-error');
+                        if (!errorElement) {
+                            errorElement = document.createElement('div');
+                            errorElement.className = 'error-message department-error';
+                            errorElement.textContent = 'Por favor, selecione um departamento.';
+                            departmentSelect.parentNode.insertBefore(errorElement, departmentSelect.nextSibling);
+                        }
+                        errorElement.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        departmentSelect.classList.remove('input-error');
+                        const errorElement = contact.querySelector('.department-error');
+                        if (errorElement) errorElement.style.display = 'none';
+                    }
+                    
+                    // Validar comunicação
+                    if (communicationCheckboxes.length === 0) {
+                        const communicationContainer = contact.querySelector('.comunicacao-titulo').parentNode;
+                        let errorElement = contact.querySelector('.communication-error');
+                        if (!errorElement) {
+                            errorElement = document.createElement('div');
+                            errorElement.className = 'error-message communication-error';
+                            errorElement.textContent = 'Por favor, selecione pelo menos um tipo de comunicação.';
+                            communicationContainer.appendChild(errorElement);
+                        }
+                        errorElement.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        const errorElement = contact.querySelector('.communication-error');
+                        if (errorElement) errorElement.style.display = 'none';
+                    }
                 }
             });
             

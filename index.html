@@ -34,6 +34,8 @@
         .btn-remove:hover { background-color: #d43f3f; }
         .item-block { border-top: 1px solid #ddd; margin-top: 20px; padding-top: 20px; }
         .hidden { display: none; }
+        .error-message { color: #d32f2f; font-size: 0.9em; margin-top: -8px; margin-bottom: 8px; display: none; }
+        .input-error { border-color: #d32f2f !important; }
     </style>
 </head>
 <body>
@@ -57,8 +59,10 @@
                     <div class="item-header"><h3>Contato 1 (Obrigatório)</h3></div>
                     <label>Este e-mail receberá os comunicados selecionados abaixo:</label>
                     <input type="email" name="email[]" placeholder="ex: contato@empresa.com" required>
+                    <div class="error-message" id="email-error-0">Este e-mail já foi cadastrado em outro contato.</div>
                     <label>Telefone:</label>
                     <input type="tel" name="telefone[]" placeholder="(DD) 99999-9999" required>
+                    <div class="error-message" id="phone-error-0">Telefone inválido. Verifique o DDD e evite sequências numéricas.</div>
                     <label>Departamento:</label>
                     <select name="departamento[]" required>
                         <option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">Recursos Humanos (RH)</option><option value="Departamento Pessoal">Departamento Pessoal</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option>
@@ -111,7 +115,124 @@
     </div>
 
     <script>
-        function setDateLimits(dateInputElement ) {
+        // Lista de DDDs válidos no Brasil
+        const validDDDs = [
+            '11', '12', '13', '14', '15', '16', '17', '18', '19', // São Paulo
+            '21', '22', '24', // Rio de Janeiro
+            '27', '28', // Espírito Santo
+            '31', '32', '33', '34', '35', '37', '38', // Minas Gerais
+            '41', '42', '43', '44', '45', '46', // Paraná
+            '47', '48', '49', // Santa Catarina
+            '51', '53', '54', '55', // Rio Grande do Sul
+            '61', // Distrito Federal e Goiás
+            '62', '64', // Goiás
+            '63', // Tocantins
+            '65', '66', // Mato Grosso
+            '67', // Mato Grosso do Sul
+            '68', // Acre
+            '69', // Rondônia
+            '71', '73', '74', '75', '77', // Bahia
+            '79', // Sergipe
+            '81', '87', // Pernambuco
+            '82', // Alagoas
+            '83', // Paraíba
+            '84', // Rio Grande do Norte
+            '85', '88', // Ceará
+            '86', '89', // Piauí
+            '91', '93', '94', // Pará
+            '92', '97', // Amazonas
+            '95', // Roraima
+            '96', // Amapá
+            '98', '99' // Maranhão
+        ];
+
+        function validatePhone(phoneNumber) {
+            // Remove todos os caracteres não numéricos
+            const cleanPhone = phoneNumber.replace(/\D/g, '');
+            
+            // Verifica se tem 10 ou 11 dígitos
+            if (cleanPhone.length !== 10 && cleanPhone.length !== 11) {
+                return false;
+            }
+            
+            // Extrai o DDD
+            const ddd = cleanPhone.substring(0, 2);
+            
+            // Verifica se o DDD é válido
+            if (!validDDDs.includes(ddd)) {
+                return false;
+            }
+            
+            // Extrai o número sem DDD
+            const number = cleanPhone.substring(2);
+            
+            // Verifica sequências numéricas inválidas
+            const invalidSequences = [
+                '11111111', '1111111', '111111', '11111',
+                '22222222', '2222222', '222222', '22222',
+                '33333333', '3333333', '333333', '33333',
+                '44444444', '4444444', '444444', '44444',
+                '55555555', '5555555', '555555', '55555',
+                '66666666', '6666666', '666666', '66666',
+                '77777777', '7777777', '777777', '77777',
+                '88888888', '8888888', '888888', '88888',
+                '99999999', '9999999', '999999', '99999',
+                '00000000', '0000000', '000000', '00000',
+                '12345678', '1234567', '123456', '12345',
+                '23456789', '2345678', '234567', '23456',
+                '34567890', '3456789', '345678', '34567',
+                '45678901', '4567890', '456789', '45678',
+                '56789012', '5678901', '567890', '56789',
+                '67890123', '6789012', '678901', '67890',
+                '78901234', '7890123', '789012', '78901',
+                '89012345', '8901234', '890123', '89012',
+                '90123456', '9012345', '901234', '90123',
+                '01234567', '0123456', '012345', '01234',
+                '87654321', '8765432', '876543', '87654',
+                '76543210', '7654321', '765432', '76543',
+                '65432109', '6543210', '654321', '65432',
+                '54321098', '5432109', '543210', '54321',
+                '43210987', '4321098', '432109', '43210',
+                '32109876', '3210987', '321098', '32109',
+                '21098765', '2109876', '210987', '21098',
+                '10987654', '1098765', '109876', '10987'
+            ];
+            
+            // Verifica se o número contém alguma sequência inválida
+            for (let seq of invalidSequences) {
+                if (number.includes(seq)) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function validateUniqueEmail(emailInput, currentIndex) {
+            const currentEmail = emailInput.value.toLowerCase().trim();
+            if (!currentEmail) return true;
+            
+            const allEmails = document.querySelectorAll('input[name="email[]"]');
+            for (let i = 0; i < allEmails.length; i++) {
+                if (i !== currentIndex && allEmails[i].value.toLowerCase().trim() === currentEmail) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function validateFullName(nameInput) {
+            const name = nameInput.value.trim();
+            if (!name) return true; // Campo vazio é válido se não for obrigatório
+            
+            // Remove espaços extras e divide em palavras
+            const words = name.split(/\s+/).filter(word => word.length > 0);
+            
+            // Verifica se tem pelo menos 2 palavras (nome e sobrenome)
+            return words.length >= 2;
+        }
+
+        function setDateLimits(dateInputElement) {
             const today = new Date();
             const yyyy = today.getFullYear();
             const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -136,6 +257,58 @@
                     }
                 }
                 e.target.value = formattedValue;
+                
+                // Validação em tempo real
+                const isValid = validatePhone(e.target.value);
+                const contactItem = e.target.closest('.contact-item');
+                const index = Array.from(document.querySelectorAll('.contact-item')).indexOf(contactItem);
+                const errorElement = document.getElementById(`phone-error-${index}`);
+                
+                if (e.target.value && !isValid) {
+                    e.target.classList.add('input-error');
+                    if (errorElement) errorElement.style.display = 'block';
+                } else {
+                    e.target.classList.remove('input-error');
+                    if (errorElement) errorElement.style.display = 'none';
+                }
+            });
+        }
+
+        function applyEmailValidation(element, index) {
+            element.addEventListener('blur', function(e) {
+                const isUnique = validateUniqueEmail(e.target, index);
+                const errorElement = document.getElementById(`email-error-${index}`);
+                
+                if (e.target.value && !isUnique) {
+                    e.target.classList.add('input-error');
+                    if (errorElement) errorElement.style.display = 'block';
+                } else {
+                    e.target.classList.remove('input-error');
+                    if (errorElement) errorElement.style.display = 'none';
+                }
+            });
+        }
+
+        function applyNameValidation(element) {
+            element.addEventListener('blur', function(e) {
+                const isValid = validateFullName(e.target);
+                const parentBlock = e.target.closest('.item-block');
+                let errorElement = parentBlock.querySelector('.name-error');
+                
+                if (!errorElement) {
+                    errorElement = document.createElement('div');
+                    errorElement.className = 'error-message name-error';
+                    errorElement.textContent = 'Por favor, digite o nome completo (nome e sobrenome).';
+                    e.target.parentNode.insertBefore(errorElement, e.target.nextSibling);
+                }
+                
+                if (e.target.value && !isValid) {
+                    e.target.classList.add('input-error');
+                    errorElement.style.display = 'block';
+                } else {
+                    e.target.classList.remove('input-error');
+                    errorElement.style.display = 'none';
+                }
             });
         }
 
@@ -183,9 +356,11 @@
             const newContact = document.createElement('div');
             newContact.className = 'contact-item item-block';
             newContact.innerHTML = `
-                <div class="item-header"><h3>Contato ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div>
+                <div class="item-header"><h3>Contato ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove(); updateContactIndexes();">Remover</span></div>
                 <label>E-mail:</label><input type="email" name="email[]" placeholder="ex: contato@empresa.com">
+                <div class="error-message" id="email-error-${count - 1}">Este e-mail já foi cadastrado em outro contato.</div>
                 <label>Telefone:</label><input type="tel" name="telefone[]" placeholder="(DD) 99999-9999">
+                <div class="error-message" id="phone-error-${count - 1}">Telefone inválido. Verifique o DDD e evite sequências numéricas.</div>
                 <label>Departamento:</label><select name="departamento[]"><option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">RH</option><option value="Departamento Pessoal">DP</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option></select>
                 <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
                 <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
@@ -194,7 +369,31 @@
                 <label class="checkbox-label" style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
             `;
             container.insertBefore(newContact, container.querySelector('.btn-add'));
-            applyPhoneMask(newContact.querySelector('input[name="telefone[]"]'));
+            
+            const phoneInput = newContact.querySelector('input[name="telefone[]"]');
+            const emailInput = newContact.querySelector('input[name="email[]"]');
+            
+            applyPhoneMask(phoneInput);
+            applyEmailValidation(emailInput, count - 1);
+        }
+
+        function updateContactIndexes() {
+            const contacts = document.querySelectorAll('.contact-item');
+            contacts.forEach((contact, index) => {
+                const emailError = contact.querySelector('.error-message[id^="email-error"]');
+                const phoneError = contact.querySelector('.error-message[id^="phone-error"]');
+                
+                if (emailError) emailError.id = `email-error-${index}`;
+                if (phoneError) phoneError.id = `phone-error-${index}`;
+                
+                const emailInput = contact.querySelector('input[name="email[]"]');
+                if (emailInput) {
+                    // Remove listeners antigos e adiciona novos com índice correto
+                    const newEmailInput = emailInput.cloneNode(true);
+                    emailInput.parentNode.replaceChild(newEmailInput, emailInput);
+                    applyEmailValidation(newEmailInput, index);
+                }
+            });
         }
 
         function addSocio() {
@@ -205,8 +404,10 @@
             newSocio.innerHTML = `<div class="item-header"><h3>Sócio ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Sócio:</label><input type="text" name="socio_nome[]" oninput="toggleCpfRequired(this)"><label>CPF do Sócio:</label><input type="text" name="socio_cpf[]" placeholder="000.000.000-00"><label>Data de Entrada:</label><input type="date" name="socio_data[]">`;
             container.insertBefore(newSocio, container.querySelector('.btn-add'));
             const dateInput = newSocio.querySelector('input[name="socio_data[]"]');
+            const nameInput = newSocio.querySelector('input[name="socio_nome[]"]');
             setDateLimits(dateInput);
             applyCpfMask(newSocio.querySelector('input[name="socio_cpf[]"]'));
+            applyNameValidation(nameInput);
         }
 
         function addColaborador() {
@@ -217,8 +418,10 @@
             newColaborador.innerHTML = `<div class="item-header"><h3>Colaborador ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Colaborador:</label><input type="text" name="colaborador_nome[]" oninput="toggleCpfRequired(this)"><label>CPF do Colaborador:</label><input type="text" name="colaborador_cpf[]" placeholder="000.000.000-00"><label>Data de Admissão:</label><input type="date" name="colaborador_data[]">`;
             container.insertBefore(newColaborador, container.querySelector('.btn-add'));
             const dateInput = newColaborador.querySelector('input[name="colaborador_data[]"]');
+            const nameInput = newColaborador.querySelector('input[name="colaborador_nome[]"]');
             setDateLimits(dateInput);
             applyCpfMask(newColaborador.querySelector('input[name="colaborador_cpf[]"]'));
+            applyNameValidation(nameInput);
         }
 
         function toggleCpfRequired(nameInput) {
@@ -231,10 +434,64 @@
             }
         }
 
+        // Função de validação antes do envio
+        function validateForm() {
+            let isValid = true;
+            const statusMsg = document.querySelector('.mensagem-status');
+            
+            // Validar telefones
+            const phoneInputs = document.querySelectorAll('input[name="telefone[]"]');
+            phoneInputs.forEach((input, index) => {
+                if (input.value && !validatePhone(input.value)) {
+                    input.classList.add('input-error');
+                    const errorElement = document.getElementById(`phone-error-${index}`);
+                    if (errorElement) errorElement.style.display = 'block';
+                    isValid = false;
+                }
+            });
+            
+            // Validar emails únicos
+            const emailInputs = document.querySelectorAll('input[name="email[]"]');
+            emailInputs.forEach((input, index) => {
+                if (input.value && !validateUniqueEmail(input, index)) {
+                    input.classList.add('input-error');
+                    const errorElement = document.getElementById(`email-error-${index}`);
+                    if (errorElement) errorElement.style.display = 'block';
+                    isValid = false;
+                }
+            });
+            
+            // Validar nomes completos
+            const nameInputs = document.querySelectorAll('input[name*="nome[]"]');
+            nameInputs.forEach(input => {
+                if (input.value && !validateFullName(input)) {
+                    input.classList.add('input-error');
+                    const parentBlock = input.closest('.item-block');
+                    let errorElement = parentBlock.querySelector('.name-error');
+                    if (errorElement) errorElement.style.display = 'block';
+                    isValid = false;
+                }
+            });
+            
+            if (!isValid) {
+                statusMsg.textContent = 'Por favor, corrija os erros destacados antes de enviar.';
+                statusMsg.className = 'mensagem-status mensagem-erro';
+                statusMsg.style.display = 'block';
+            }
+            
+            return isValid;
+        }
+
         // SUBSTITUA A FUNÇÃO DE SUBMIT PELA VERSÃO ABAIXO NO SEU index.html
 
 document.getElementById('formulario').addEventListener('submit', function (e) {
     e.preventDefault();
+    
+    // Validar formulário antes de enviar
+    if (!validateForm()) {
+        return;
+    }
+    
     const statusMsg = document.querySelector('.mensagem-status');
     statusMsg.style.display = 'block';
     const firstContact = document.querySelector('.contact-item');
@@ -287,8 +544,13 @@ document.getElementById('formulario').addEventListener('submit', function (e) {
             document.getElementById('razao').value = urlParams.get('razaoSocial');
         }
         
+        // Aplicar máscaras e validações aos campos existentes
         document.querySelectorAll('input[name="telefone[]"]').forEach(applyPhoneMask);
+        document.querySelectorAll('input[name="email[]"]').forEach((input, index) => {
+            applyEmailValidation(input, index);
+        });
         applyCurrencyMask(document.getElementById('faturamento'));
     </script>
 </body>
 </html>
+

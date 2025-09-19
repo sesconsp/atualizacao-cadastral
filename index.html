@@ -34,21 +34,31 @@
         .item-block { border-top: 1px solid #ddd; margin-top: 20px; padding-top: 20px; }
         .hidden { display: none; }
 
-        /* Estilo Minimalista */
-        .aviso-tratamento.minimalista {
-            font-size: 0.85em;
-            color: #555;
+        /* Estilo Corporativo */
+        .aviso-tratamento.corporativo {
+            background-color: #f8f9fa;
+            border: 1px solid #dcdcdc;
+            border-radius: 6px;
+            padding: 18px 20px;
+            margin-top: 25px;
+            font-size: 0.95em;
+            line-height: 1.6em;
+            color: #333;
             text-align: justify;
-            margin-top: 20px;
-            border-top: 1px solid #ddd;
-            padding-top: 12px;
-            background: transparent;
         }
-        .aviso-tratamento.minimalista a {
-            color: #004d80;
+        .aviso-tratamento.corporativo h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #222;
+        }
+        .aviso-tratamento.corporativo a {
+            color: #006699;
+            font-weight: bold;
             text-decoration: none;
         }
-        .aviso-tratamento.minimalista a:hover {
+        .aviso-tratamento.corporativo a:hover {
             text-decoration: underline;
         }
     </style>
@@ -75,12 +85,16 @@
             <p class="mensagem-status"></p>
         </form>
 
-        <!-- Aviso minimalista -->
-        <div class="aviso-tratamento minimalista">
+        <!-- Aviso corporativo -->
+        <div class="aviso-tratamento corporativo">
+            <h3>Aviso de Tratamento de Dados</h3>
             <p>
-                <strong>Aviso de Tratamento de Dados:</strong> As informações fornecidas para atualização do cadastro serão tratadas pelo Sescon-SP em conformidade 
-                com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 – LGPD), com a finalidade de assegurar o correto enquadramento sindical, 
-                o cumprimento de obrigações legais e a manutenção da comunicação institucional com os representados.  
+                As informações fornecidas para atualização do cadastro serão tratadas pelo Sescon-SP em conformidade 
+                com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 – LGPD), com a finalidade de assegurar 
+                o correto enquadramento sindical, o cumprimento de obrigações legais e a manutenção da comunicação institucional 
+                com os representados.
+            </p>
+            <p>
                 Consulte nossa <a href="https://sescon.org.br/wp-content/uploads/2025/05/POLITICA-DE-PRIVACIDADE-E-COOKIES-1.pdf" target="_blank">Política de Privacidade</a>.
             </p>
         </div>

@@ -6,6 +6,7 @@
     <title>Atualização Cadastral - Sescon-SP</title>
     <link rel="icon" href="https://sescon.org.br/wp-content/uploads/2020/09/cropped-favicon-32x32.png" sizes="32x32">
     <link rel="icon" href="https://sescon.org.br/wp-content/uploads/2020/09/cropped-favicon-192x192.png" sizes="192x192">
+    
     <style>
         body { margin: 0; font-family: 'Roboto', Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: url('https://i.imgur.com/iE3JKYM.png' ) no-repeat center center fixed; background-size: cover; padding: 20px 0; }
         .container { background-color: rgba(0, 151, 206, 0.6); padding: 22px; border-radius: 12px; width: 100%; max-width: 600px; color: #fff; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); }
@@ -33,20 +34,6 @@
         .btn-remove:hover { background-color: #d43f3f; }
         .item-block { border-top: 1px solid #ddd; margin-top: 20px; padding-top: 20px; }
         .hidden { display: none; }
-
-        /* Aviso em texto branco, fora de blocos */
-        .aviso-tratamento {
-            font-size: 0.85em;
-            color: #fff;
-            margin-top: 20px;
-            text-align: justify;
-            line-height: 1.5em;
-        }
-        .aviso-tratamento a {
-            color: #fff;
-            font-weight: bold;
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -55,7 +42,6 @@
         <p class="subtitulo-sescon">Sescon - SP</p>
         <p class="descricao">Preencha corretamente as informações. Pelo menos um contato é obrigatório para garantirmos a comunicação eficaz.</p>
 
-        <!-- FORMULÁRIO ORIGINAL INTACTO -->
         <form id="formulario">
             <section>
                 <h2>1. Identificação da Empresa</h2>
@@ -75,16 +61,7 @@
                     <input type="tel" name="telefone[]" placeholder="(DD) 99999-9999" required>
                     <label>Departamento:</label>
                     <select name="departamento[]" required>
-                        <option value="">Selecione</option>
-                        <option value="Socio">Sócio</option>
-                        <option value="Diretoria">Diretoria</option>
-                        <option value="Recursos Humanos">Recursos Humanos (RH)</option>
-                        <option value="Departamento Pessoal">Departamento Pessoal</option>
-                        <option value="Financeiro">Financeiro</option>
-                        <option value="Contabilidade">Contabilidade</option>
-                        <option value="Juridico">Jurídico</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Outros">Outros</option>
+                        <option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">Recursos Humanos (RH)</option><option value="Departamento Pessoal">Departamento Pessoal</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option>
                     </select>
                     <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
                     <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
@@ -121,8 +98,6 @@
             <button type="submit" class="btn-submit">Enviar Atualização</button>
             <p class="mensagem-status"></p>
         </form>
-
-        <!-- Aviso fora do bloco -->
         <div class="aviso-tratamento">
             <p>
                 <strong>Aviso de Tratamento de Dados:</strong> As informações fornecidas para atualização do cadastro serão tratadas pelo Sescon-SP em conformidade 
@@ -134,5 +109,186 @@
 
         <footer><img src="https://i.imgur.com/zWWSzuu.png" alt="Logo Sescon-SP" class="logo"></footer>
     </div>
+
+    <script>
+        function setDateLimits(dateInputElement ) {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const maxDate = `${yyyy}-${mm}-${dd}`;
+            dateInputElement.setAttribute('max', maxDate);
+            dateInputElement.setAttribute('min', '1930-01-01');
+        }
+
+        function applyPhoneMask(element) {
+            element.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                let formattedValue = '';
+                if (value.length > 0) { formattedValue = `(${value.substring(0, 2)}`; }
+                if (value.length > 2) {
+                    if (value.length > 10) {
+                         formattedValue += `) ${value.substring(2, 7)}`;
+                         if (value.length > 7) { formattedValue += `-${value.substring(7, 11)}`; }
+                    } else {
+                        formattedValue += `) ${value.substring(2, 6)}`;
+                        if (value.length > 6) { formattedValue += `-${value.substring(6, 10)}`; }
+                    }
+                }
+                e.target.value = formattedValue;
+            });
+        }
+
+        function applyCurrencyMask(element) {
+            element.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value === '') {
+                    e.target.value = '';
+                    return;
+                }
+                let numberValue = parseInt(value, 10) / 100;
+                e.target.value = numberValue.toLocaleString('pt-BR', {
+                    style: 'currency', currency: 'BRL'
+                });
+            });
+        }
+
+        function applyCpfMask(element) {
+            element.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '').substring(0, 11);
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                e.target.value = value;
+            });
+        }
+
+        function applyCnpjMask(element) {
+            let value = element.value.replace(/\D/g, '').substring(0, 14);
+            value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+            value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+            value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+            value = value.replace(/(\d{4})(\d)/, '$1-$2');
+            element.value = value;
+        }
+
+        document.getElementById('reveal-button').addEventListener('click', function() {
+            document.getElementById('optional-section').classList.remove('hidden');
+            this.classList.add('hidden');
+        });
+
+        function addContact() {
+            const container = document.getElementById('contact-section');
+            const count = container.querySelectorAll('.contact-item').length + 1;
+            const newContact = document.createElement('div');
+            newContact.className = 'contact-item item-block';
+            newContact.innerHTML = `
+                <div class="item-header"><h3>Contato ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div>
+                <label>E-mail:</label><input type="email" name="email[]" placeholder="ex: contato@empresa.com">
+                <label>Telefone:</label><input type="tel" name="telefone[]" placeholder="(DD) 99999-9999">
+                <label>Departamento:</label><select name="departamento[]"><option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">RH</option><option value="Departamento Pessoal">DP</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option></select>
+                <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
+                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
+                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
+                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
+                <label class="checkbox-label" style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
+            `;
+            container.insertBefore(newContact, container.querySelector('.btn-add'));
+            applyPhoneMask(newContact.querySelector('input[name="telefone[]"]'));
+        }
+
+        function addSocio() {
+            const container = document.getElementById('socios-container');
+            const count = container.querySelectorAll('.item-block').length + 1;
+            const newSocio = document.createElement('div');
+            newSocio.className = 'item-block';
+            newSocio.innerHTML = `<div class="item-header"><h3>Sócio ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Sócio:</label><input type="text" name="socio_nome[]" oninput="toggleCpfRequired(this)"><label>CPF do Sócio:</label><input type="text" name="socio_cpf[]" placeholder="000.000.000-00"><label>Data de Entrada:</label><input type="date" name="socio_data[]">`;
+            container.insertBefore(newSocio, container.querySelector('.btn-add'));
+            const dateInput = newSocio.querySelector('input[name="socio_data[]"]');
+            setDateLimits(dateInput);
+            applyCpfMask(newSocio.querySelector('input[name="socio_cpf[]"]'));
+        }
+
+        function addColaborador() {
+            const container = document.getElementById('colaboradores-container');
+            const count = container.querySelectorAll('.item-block').length + 1;
+            const newColaborador = document.createElement('div');
+            newColaborador.className = 'item-block';
+            newColaborador.innerHTML = `<div class="item-header"><h3>Colaborador ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Colaborador:</label><input type="text" name="colaborador_nome[]" oninput="toggleCpfRequired(this)"><label>CPF do Colaborador:</label><input type="text" name="colaborador_cpf[]" placeholder="000.000.000-00"><label>Data de Admissão:</label><input type="date" name="colaborador_data[]">`;
+            container.insertBefore(newColaborador, container.querySelector('.btn-add'));
+            const dateInput = newColaborador.querySelector('input[name="colaborador_data[]"]');
+            setDateLimits(dateInput);
+            applyCpfMask(newColaborador.querySelector('input[name="colaborador_cpf[]"]'));
+        }
+
+        function toggleCpfRequired(nameInput) {
+            const parentBlock = nameInput.closest('.item-block');
+            const cpfInput = parentBlock.querySelector('input[name*="cpf"]');
+            if (nameInput.value.trim() !== '') {
+                cpfInput.required = true;
+            } else {
+                cpfInput.required = false;
+            }
+        }
+
+        // SUBSTITUA A FUNÇÃO DE SUBMIT PELA VERSÃO ABAIXO NO SEU index.html
+
+document.getElementById('formulario').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const statusMsg = document.querySelector('.mensagem-status');
+    statusMsg.style.display = 'block';
+    const firstContact = document.querySelector('.contact-item');
+    if (!firstContact.querySelector('input[name="email[]"]').value || !firstContact.querySelector('input[name="telefone[]"]').value) {
+        statusMsg.textContent = 'Por favor, preencha pelo menos o e-mail e telefone do Contato 1.';
+        statusMsg.className = 'mensagem-status mensagem-erro';
+        return;
+    }
+    statusMsg.textContent = 'Enviando...';
+    statusMsg.className = 'mensagem-status';
+
+    // ===== CORREÇÃO AQUI =====
+    // Pega o valor do CNPJ e remove a máscara antes de enviar
+    const cnpjValue = document.getElementById('cnpj').value.replace(/\D/g, '');
+    // =========================
+
+    const payload = {
+        // ===== CORREÇÃO AQUI =====
+        cnpj: cnpjValue, // Usa o valor sem máscara
+        // =========================
+        razaoSocial: document.getElementById('razao').value,
+        faturamento: document.getElementById('faturamento').value,
+        funcionarios: document.getElementById('funcionarios').value,
+        contatos: Array.from(document.querySelectorAll('.contact-item')).map(item => ({ email: item.querySelector('input[name="email[]"]').value, telefone: item.querySelector('input[name="telefone[]"]').value, departamento: item.querySelector('select[name="departamento[]"]').value, preferencias: Array.from(item.querySelectorAll('input[name="comunicacoes[]"]:checked')).map(el => el.value) })).filter(c => c.email),
+        socios: Array.from(document.querySelectorAll('#socios-container .item-block')).map(item => ({ nome: item.querySelector('input[name="socio_nome[]"]').value, cpf: item.querySelector('input[name="socio_cpf[]"]').value, data: item.querySelector('input[name="socio_data[]"]').value })).filter(s => s.nome),
+        colaboradores: Array.from(document.querySelectorAll('#colaboradores-container .item-block')).map(item => ({ nome: item.querySelector('input[name="colaborador_nome[]"]').value, cpf: item.querySelector('input[name="colaborador_cpf[]"]').value, data: item.querySelector('input[name="colaborador_data[]"]').value })).filter(c => c.nome)
+    };
+    const url = 'https://script.google.com/macros/s/AKfycbz_iWAlH4-4x5r6nYxRptYFlKsCXMQW_Q5ED9ejkAqm2mQ1T3559Zkz8P7wso8dAVB5/exec';
+    fetch(url, { method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), redirect: 'follow' })
+    .then(res => {
+        statusMsg.textContent = '✅ Dados enviados com sucesso!📩';
+        statusMsg.className = 'mensagem-status mensagem-sucesso';
+        document.getElementById('formulario').reset();
+        document.getElementById('optional-section').classList.add('hidden');
+        document.getElementById('reveal-button').classList.remove('hidden');
+    }).catch(error => {
+        statusMsg.textContent = '❌ Ocorreu um erro. Tente novamente.';
+        statusMsg.className = 'mensagem-status mensagem-erro';
+    });
+});
+
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('cnpj')) {
+            const cnpjInput = document.getElementById('cnpj');
+            cnpjInput.value = urlParams.get('cnpj');
+            applyCnpjMask(cnpjInput);
+        }
+        if (urlParams.has('razaoSocial')) {
+            document.getElementById('razao').value = urlParams.get('razaoSocial');
+        }
+        
+        document.querySelectorAll('input[name="telefone[]"]').forEach(applyPhoneMask);
+        applyCurrencyMask(document.getElementById('faturamento'));
+    </script>
 </body>
 </html>

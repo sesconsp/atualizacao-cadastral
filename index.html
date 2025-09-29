@@ -771,35 +771,45 @@
         });
 
         // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            // Configurar listeners para mudança de tipo de documento
-            document.querySelectorAll('input[name="documentType"]').forEach(radio => {
-                radio.addEventListener('change', updateDocumentField);
-            });
+document.addEventListener('DOMContentLoaded', function() {
+    // Configurar listeners para mudança de tipo de documento
+    document.querySelectorAll('input[name="documentType"]').forEach(radio => {
+        radio.addEventListener('change', updateDocumentField);
+    });
 
-            // Verificar se há parâmetros na URL para pré-preenchimento
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('cnpj')) {
-                const cnpjInput = document.getElementById('documento');
-                cnpjInput.value = urlParams.get('cnpj');
-                document.querySelector('input[name="documentType"][value="cnpj"]').checked = true;
-                updateDocumentField();
-                applyCnpjMask(cnpjInput);
-            }
-            if (urlParams.has('razaoSocial')) {
-                document.getElementById('razao').value = urlParams.get('razaoSocial');
-            }
-            
-            // Aplicar máscaras e validações aos campos existentes
-            document.querySelectorAll('input[name="telefone[]"]').forEach(applyPhoneMask);
-            document.querySelectorAll('input[name="email[]"]').forEach((input, index) => {
-                applyEmailValidation(input, index);
-            });
-            applyCurrencyMask(document.getElementById('faturamento'));
-            
-            // Configurar campo de documento inicial
-            updateDocumentField();
-        });
+    // Verificar se há parâmetros na URL para pré-preenchimento
+    const urlParams = new URLSearchParams(window.location.search);
+    const cnpjInput = document.getElementById('documento');
+    const razaoInput = document.getElementById('razao');
+
+    if (urlParams.has('cnpj')) {
+        // Caso seja chamado da planilha
+        document.querySelector('input[name="documentType"][value="cnpj"]').checked = true;
+        updateDocumentField();
+        cnpjInput.value = urlParams.get('cnpj');
+        razaoInput.value = urlParams.get('razaoSocial') || "";
+
+        // Aplica máscara e bloqueia edição
+        applyCnpjMask(cnpjInput);
+        cnpjInput.readOnly = true;
+        razaoInput.readOnly = true;
+    } else {
+        // Caso seja preenchido manualmente
+        cnpjInput.readOnly = false;
+        razaoInput.readOnly = false;
+    }
+
+    // Aplicar máscaras e validações aos campos existentes
+    document.querySelectorAll('input[name="telefone[]"]').forEach(applyPhoneMask);
+    document.querySelectorAll('input[name="email[]"]').forEach((input, index) => {
+        applyEmailValidation(input, index);
+    });
+    applyCurrencyMask(document.getElementById('faturamento'));
+
+    // Configurar campo de documento inicial
+    updateDocumentField();
+});
+
     </script>
 </body>
 </html>

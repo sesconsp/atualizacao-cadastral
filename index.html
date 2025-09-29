@@ -4,813 +4,420 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atualização Cadastral - Sescon-SP</title>
-    <link rel="icon" href="https://sescon.org.br/wp-content/uploads/2020/09/cropped-favicon-32x32.png" sizes="32x32">
-    <link rel="icon" href="https://sescon.org.br/wp-content/uploads/2020/09/cropped-favicon-192x192.png" sizes="192x192">
-    
     <style>
-        body { margin: 0; font-family: 'Roboto', Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: url('https://i.imgur.com/iE3JKYM.png' ) no-repeat center center fixed; background-size: cover; padding: 20px 0; }
-        .container { background-color: rgba(0, 151, 206, 0.6); padding: 22px; border-radius: 12px; width: 100%; max-width: 600px; color: #fff; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); }
-        h1 { text-align: center; color: #fff; margin-bottom: 5px; font-size: 1.7em; }
-        .subtitulo-sescon { text-align: center; color: #fff; font-size: 1.4em; margin-top: 0px; margin-bottom: 20px; font-weight: bold; }
-        .descricao { text-align: center; font-size: 1.05em; color: #fff; margin-bottom: 18px; line-height: 1.5em; }
-        section { margin-bottom: 24px; padding: 18px; border-radius: 10px; background-color: rgba(255, 255, 255, 0.85); border: 1px solid #0097ce; }
-        section h2 { color: #0097ce; font-size: 1.3em; margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 8px; color: #333; }
-        input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="date"], select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; margin-bottom: 12px; box-sizing: border-box; }
-        .comunicacao-titulo { font-weight: bold; color: #333; margin-bottom: 8px; }
-        .checkbox-label { display: flex; align-items: center; margin-bottom: 8px; font-weight: normal; }
-        .checkbox-label input[type="checkbox"] { width: auto; margin-right: 10px; }
-        .btn-add, .btn-submit, .btn-reveal { background-color: #fff; color: #0097ce; padding: 12px 20px; border: 1px solid #0097ce; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; display: inline-block; transition: all 0.3s ease; }
-        .btn-add:hover, .btn-submit:hover, .btn-reveal:hover { background-color: #0097ce; color: #fff; }
-        .btn-submit, .btn-reveal { width: 100%; margin-top: 10px; }
-        .mensagem-status { text-align: center; font-size: 1.1em; margin-top: 15px; display: none; padding: 10px; border-radius: 6px; }
-        .mensagem-sucesso { background-color: #d4edda; color: #155724; }
-        .mensagem-erro { background-color: #f8d7da; color: #721c24; }
-        footer { text-align: center; margin-top: 30px; }
-        footer .logo { display: block; margin: 0 auto; max-width: 140px; height: auto; }
-        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .item-header h3 { color: #0097ce; font-size: 1.2em; margin: 0; }
-        .btn-remove { background-color: #ff4d4d; color: white; padding: 5px 10px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9em; font-weight: bold; transition: background-color 0.3s ease; }
-        .btn-remove:hover { background-color: #d43f3f; }
-        .item-block { border-top: 1px solid #ddd; margin-top: 20px; padding-top: 20px; }
-        .hidden { display: none; }
-        .error-message { color: #d32f2f; font-size: 0.9em; margin-top: -8px; margin-bottom: 8px; display: none; }
-        .input-error { border-color: #d32f2f !important; }
-        .document-type-selector { display: flex; gap: 15px; margin-bottom: 15px; }
-        .document-type-selector label { display: flex; align-items: center; font-weight: normal; margin-bottom: 0; cursor: pointer; }
-        .document-type-selector input[type="radio"] { width: auto; margin-right: 8px; }
-        .field-group { margin-bottom: 15px; }
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url('https://i.imgur.com/iE3JKYM.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .container {
+            background-color: rgba(0, 151, 206, 0.6);
+            padding: 18px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 600px;
+            color: #fff;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 5px;
+            font-size: 1.7em;
+        }
+
+        .subtitulo-sescon {
+            text-align: center;
+            color: #fff;
+            font-size: 1.4em;
+            margin-top: 0px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .descricao {
+            text-align: center;
+            font-size: 1.05em;
+            color: #fff;
+            margin-bottom: 18px;
+            line-height: 1.5em;
+        }
+
+        section {
+            margin-bottom: 24px;
+            padding: 14px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #0097ce;
+        }
+
+        section h2 {
+            color: #0097ce;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        .comunicacao-titulo {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        section label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: normal;
+        }
+
+        section label input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .btn-add,
+        .btn-submit {
+            background-color: #fff;
+            color: #0097ce;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-add {
+            margin-top: 8px;
+        }
+
+        .btn-add:hover,
+        .btn-submit:hover {
+            background-color: #f0f0f0;
+        }
+
+        .btn-submit {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .mensagem-status {
+            text-align: center;
+            font-size: 1.1em;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .mensagem-sucesso {
+            color: #00cc88;
+        }
+
+        .mensagem-erro {
+            color: #333;
+        }
+
+        .mensagem-erro::before {
+            content: '❌ ';
+            color: #ff3333;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        footer .logo {
+            display: block;
+            margin: 0 auto;
+            max-width: 140px;
+            height: auto;
+        }
+
+        .contact-title {
+            color: #0097ce;
+            font-size: 1.2em;
+        }
+
+        .contact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-top: 10px;
+        }
+
+        .btn-remove {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .btn-remove:hover {
+            background-color: #ff1a1a;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Atualize seus dados cadastrais conosco</h1>
         <p class="subtitulo-sescon">Sescon - SP</p>
-        <p class="descricao">Preencha corretamente as informações. Pelo menos um contato é obrigatório para garantirmos a comunicação eficaz.</p>
+        <p class="descricao">Preencha corretamente todas as informações. Os campos de contato são obrigatórios para garantirmos a comunicação eficaz.</p>
 
         <form id="formulario">
             <section>
                 <h2>1. Identificação da Empresa</h2>
-                
-                <div class="document-type-selector">
-                    <label>
-                        <input type="radio" name="documentType" value="cnpj" checked>
-                        Pessoa Jurídica (CNPJ)
-                    </label>
-                    <label>
-                        <input type="radio" name="documentType" value="cpf">
-                        Pessoa Física (CPF)
-                    </label>
-                </div>
+                <label for="cnpj">CNPJ:</label>
+                <input type="text" id="cnpj" name="cnpj" readonly placeholder="00.000.000/0000-00">
 
-                <div class="field-group">
-                    <label for="documento" id="documento-label">CNPJ:</label>
-                    <input type="text" id="documento" name="documento" placeholder="00.000.000/0000-00" required>
-                    <div class="error-message" id="documento-error">Documento inválido.</div>
-                </div>
-
-                <div class="field-group">
-                    <label for="razao" id="razao-label">Razão Social:</label>
-                    <input type="text" id="razao" name="razao" placeholder="Digite a razão social da empresa" required>
-                </div>
+                <label for="razao">Razão Social:</label>
+                <input type="text" id="razao" name="razao" readonly placeholder="Razão Social da Empresa">
             </section>
 
-            <section id="contact-section">
+            <section>
                 <h2>2. Contatos</h2>
                 <div class="contact-item">
-                    <div class="item-header"><h3>Contato 1 (Obrigatório)</h3></div>
-                    <label>Este e-mail receberá os comunicados selecionados abaixo:</label>
-                    <input type="email" name="email[]" placeholder="ex: contato@empresa.com" required>
-                    <div class="error-message" id="email-error-0">Este e-mail já foi cadastrado em outro contato.</div>
-                    <label>Telefone:</label>
-                    <input type="tel" name="telefone[]" placeholder="(DD) 99999-9999" required>
-                    <div class="error-message" id="phone-error-0">Telefone inválido. Verifique o DDD e evite sequências numéricas.</div>
-                    <label>Departamento:</label>
-                    <select name="departamento[]" required>
-                        <option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">Recursos Humanos (RH)</option><option value="Departamento Pessoal">Departamento Pessoal</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option>
+                    <label for="email1">Este e-mail receberá os comunicados selecionados abaixo:</label>
+                    <input type="email" id="email1" name="email[]" placeholder="ex: contato@empresa.com" required>
+                    
+                    <label for="telefone1">Telefone:</label>
+                    <input type="tel" id="telefone1" name="telefone[]" placeholder="(DD) 99999-9999" required>
+                    
+                    <label for="departamento1">Departamento:</label>
+                    <select id="departamento1" name="departamento[]" required>
+                        <option value="">Selecione</option>
+                        <option value="Socio">Sócio</option>
+                        <option value="Diretoria">Diretoria</option>
+                        <option value="Recursos Humanos">Recursos Humanos (RH)</option>
+                        <option value="Departamento Pessoal">Departamento Pessoal</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="Contabilidade">Contabilidade</option>
+                        <option value="Juridico">Jurídico</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Outros">Outros</option>
                     </select>
+
                     <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
-                    <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
-                    <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
-                    <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
-                    <label class="checkbox-label" style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
+                    <label><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
+                    <label style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
+                    
+                    <span id="remove-btn-template" class="btn-remove hidden">Remover</span>
                 </div>
-                <button type="button" class="btn-add" onclick="addContact()">+ Adicionar Contato</button>
+                <button type="button" class="btn-add">+ Adicionar Contato</button>
             </section>
 
             <section>
                 <h2>3. Informações da Empresa</h2>
                 <label for="faturamento">Faturamento Bruto Anual (para cálculo das contribuições):</label>
                 <input type="text" id="faturamento" name="faturamento" placeholder="Ex: R$ 1.200.000,00" required>
+
                 <label for="funcionarios">Quantidade de Funcionários:</label>
                 <input type="number" id="funcionarios" name="funcionarios" placeholder="Ex: 25" min="0" required>
-            </section>
-
-            <section>
-                <h2>4. Sócios e Colaboradores (Opcional)</h2>
-                <button type="button" class="btn-reveal" id="reveal-button">Deseja atualizar sócios ou colaboradores? Clique aqui</button>
-                <div id="optional-section" class="hidden">
-                    <div id="socios-container">
-                        <div class="item-header" style="margin-top: 15px;"><h3>Sócios</h3></div>
-                        <button type="button" class="btn-add" onclick="addSocio()">+ Adicionar Sócio</button>
-                    </div>
-                    <div id="colaboradores-container" class="item-block">
-                        <div class="item-header"><h3>Colaboradores</h3></div>
-                        <button type="button" class="btn-add" onclick="addColaborador()">+ Adicionar Colaborador</button>
-                    </div>
-                </div>
             </section>
 
             <button type="submit" class="btn-submit">Enviar Atualização</button>
             <p class="mensagem-status"></p>
         </form>
-        <div class="aviso-tratamento">
-            <p>
-                <strong>Aviso de Tratamento de Dados:</strong> As informações fornecidas para atualização do cadastro serão tratadas pelo Sescon-SP em conformidade 
-                com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 – LGPD), com a finalidade de assegurar o correto enquadramento sindical, 
-                o cumprimento de obrigações legais e a manutenção da comunicação institucional com os representados.  
-                Consulte nossa <a href="https://sescon.org.br/wp-content/uploads/2025/05/POLITICA-DE-PRIVACIDADE-E-COOKIES-1.pdf" target="_blank">Política de Privacidade</a>.
-            </p>
-        </div>
-
         <footer><img src="https://i.imgur.com/zWWSzuu.png" alt="Logo Sescon-SP" class="logo"></footer>
     </div>
-
     <script>
-        // Lista de DDDs válidos no Brasil
-        const validDDDs = [
-            '11', '12', '13', '14', '15', '16', '17', '18', '19', // São Paulo
-            '21', '22', '24', // Rio de Janeiro
-            '27', '28', // Espírito Santo
-            '31', '32', '33', '34', '35', '37', '38', // Minas Gerais
-            '41', '42', '43', '44', '45', '46', // Paraná
-            '47', '48', '49', // Santa Catarina
-            '51', '53', '54', '55', // Rio Grande do Sul
-            '61', // Distrito Federal e Goiás
-            '62', '64', // Goiás
-            '63', // Tocantins
-            '65', '66', // Mato Grosso
-            '67', // Mato Grosso do Sul
-            '68', // Acre
-            '69', // Rondônia
-            '71', '73', '74', '75', '77', // Bahia
-            '79', // Sergipe
-            '81', '87', // Pernambuco
-            '82', // Alagoas
-            '83', // Paraíba
-            '84', // Rio Grande do Norte
-            '85', '88', // Ceará
-            '86', '89', // Piauí
-            '91', '93', '94', // Pará
-            '92', '97', // Amazonas
-            '95', // Roraima
-            '96', // Amapá
-            '98', '99' // Maranhão
-        ];
+        document.getElementById('formulario').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const statusMsg = document.querySelector('.mensagem-status');
+            statusMsg.style.display = 'block';
 
-        function validatePhone(phoneNumber) {
-            // Remove todos os caracteres não numéricos
-            const cleanPhone = phoneNumber.replace(/\D/g, '');
-            
-            // Verifica se tem 10 ou 11 dígitos
-            if (cleanPhone.length !== 10 && cleanPhone.length !== 11) {
-                return false;
-            }
-            
-            // Extrai o DDD
-            const ddd = cleanPhone.substring(0, 2);
-            
-            // Verifica se o DDD é válido
-            if (!validDDDs.includes(ddd)) {
-                return false;
-            }
-            
-            // Extrai o número sem DDD
-            const number = cleanPhone.substring(2);
-            
-            // Verifica sequências numéricas inválidas
-            const invalidSequences = [
-                '11111111', '1111111', '111111', '11111',
-                '22222222', '2222222', '222222', '22222',
-                '33333333', '3333333', '333333', '33333',
-                '44444444', '4444444', '444444', '44444',
-                '55555555', '5555555', '555555', '55555',
-                '66666666', '6666666', '666666', '66666',
-                '77777777', '7777777', '777777', '77777',
-                '88888888', '8888888', '888888', '88888',
-                '99999999', '9999999', '999999', '99999',
-                '00000000', '0000000', '000000', '00000',
-                '12345678', '1234567', '123456', '12345',
-                '23456789', '2345678', '234567', '23456',
-                '34567890', '3456789', '345678', '34567',
-                '45678901', '4567890', '456789', '45678',
-                '56789012', '5678901', '567890', '56789',
-                '67890123', '6789012', '678901', '67890',
-                '78901234', '7890123', '789012', '78901',
-                '89012345', '8901234', '890123', '89012',
-                '90123456', '9012345', '901234', '90123',
-                '01234567', '0123456', '012345', '01234',
-                '87654321', '8765432', '876543', '87654',
-                '76543210', '7654321', '765432', '76543',
-                '65432109', '6543210', '654321', '65432',
-                '54321098', '5432109', '543210', '54321',
-                '43210987', '4321098', '432109', '43210',
-                '32109876', '3210987', '321098', '32109',
-                '21098765', '2109876', '210987', '21098',
-                '10987654', '1098765', '109876', '10987'
-            ];
-            
-            // Verifica se o número contém alguma sequência inválida
-            for (let seq of invalidSequences) {
-                if (number.includes(seq)) {
-                    return false;
+            const contactItems = document.querySelectorAll('.contact-item');
+            let allValid = true;
+            for (let i = 0; i < contactItems.length; i++) {
+                if (i < 2) {
+                    const item = contactItems[i];
+                    const email = item.querySelector('input[name="email[]"]');
+                    const telefone = item.querySelector('input[name="telefone[]"]');
+                    const departamento = item.querySelector('select[name="departamento[]"]');
+                    const comunicacoes = item.querySelectorAll('input[name="comunicacoes[]"]:checked');
+
+                    if (!email.value || !telefone.value || !departamento.value || comunicacoes.length === 0) {
+                        statusMsg.textContent = 'Por favor, preencha todos os campos obrigatórios dos 2 primeiros contatos.';
+                        statusMsg.className = 'mensagem-status mensagem-erro';
+                        allValid = false;
+                        return;
+                    }
                 }
             }
-            
-            return true;
-        }
 
-        function validateUniqueEmail(emailInput, currentIndex) {
-            const currentEmail = emailInput.value.toLowerCase().trim();
-            if (!currentEmail) return true;
-            
-            const allEmails = document.querySelectorAll('input[name="email[]"]');
-            for (let i = 0; i < allEmails.length; i++) {
-                if (i !== currentIndex && allEmails[i].value.toLowerCase().trim() === currentEmail) {
-                    return false;
-                }
+            if (!allValid) {
+                return;
             }
-            return true;
-        }
 
-        function validateFullName(nameInput) {
-            const name = nameInput.value.trim();
-            if (!name) return true; // Campo vazio é válido se não for obrigatório
+            statusMsg.textContent = 'Enviando...';
             
-            // Remove espaços extras e divide em palavras
-            const words = name.split(/\s+/).filter(word => word.length > 0);
-            
-            // Verifica se tem pelo menos 2 palavras (nome e sobrenome)
-            return words.length >= 2;
-        }
+            const cnpj = document.getElementById('cnpj').value;
+            const razaoSocial = document.getElementById('razao').value;
+            const faturamento = document.getElementById('faturamento').value;
+            const funcionarios = document.getElementById('funcionarios').value;
 
-        function validateCNPJ(cnpj) {
-            cnpj = cnpj.replace(/\D/g, '');
-            
-            if (cnpj.length !== 14) return false;
-            
-            // Elimina CNPJs inválidos conhecidos
-            if (/^(\d)\1+$/.test(cnpj)) return false;
-            
-            // Valida DVs
-            let tamanho = cnpj.length - 2;
-            let numeros = cnpj.substring(0, tamanho);
-            let digitos = cnpj.substring(tamanho);
-            let soma = 0;
-            let pos = tamanho - 7;
-            
-            for (let i = tamanho; i >= 1; i--) {
-                soma += numeros.charAt(tamanho - i) * pos--;
-                if (pos < 2) pos = 9;
-            }
-            
-            let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-            if (resultado != digitos.charAt(0)) return false;
-            
-            tamanho = tamanho + 1;
-            numeros = cnpj.substring(0, tamanho);
-            soma = 0;
-            pos = tamanho - 7;
-            
-            for (let i = tamanho; i >= 1; i--) {
-                soma += numeros.charAt(tamanho - i) * pos--;
-                if (pos < 2) pos = 9;
-            }
-            
-            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-            if (resultado != digitos.charAt(1)) return false;
-            
-            return true;
-        }
+            const contatos = [];
+            document.querySelectorAll('.contact-item').forEach(item => {
+                contatos.push({
+                    email: item.querySelector('input[name="email[]"]').value,
+                    telefone: item.querySelector('input[name="telefone[]"]').value,
+                    departamento: item.querySelector('select[name="departamento[]"]').value,
+                    preferencias: Array.from(item.querySelectorAll('input[name="comunicacoes[]"]:checked')).map(el => el.value)
+                });
+            });
 
-        function validateCPF(cpf) {
-            cpf = cpf.replace(/\D/g, '');
-            
-            if (cpf.length !== 11) return false;
-            
-            // Elimina CPFs inválidos conhecidos
-            if (/^(\d)\1+$/.test(cpf)) return false;
-            
-            // Valida 1º dígito
-            let soma = 0;
-            for (let i = 0; i < 9; i++) {
-                soma += parseInt(cpf.charAt(i)) * (10 - i);
-            }
-            let resto = 11 - (soma % 11);
-            if (resto === 10 || resto === 11) resto = 0;
-            if (resto !== parseInt(cpf.charAt(9))) return false;
-            
-            // Valida 2º dígito
-            soma = 0;
-            for (let i = 0; i < 10; i++) {
-                soma += parseInt(cpf.charAt(i)) * (11 - i);
-            }
-            resto = 11 - (soma % 11);
-            if (resto === 10 || resto === 11) resto = 0;
-            if (resto !== parseInt(cpf.charAt(10))) return false;
-            
-            return true;
-        }
+            const payload = { cnpj, razaoSocial, faturamento, funcionarios, contatos };
 
-        function setDateLimits(dateInputElement) {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            const maxDate = `${yyyy}-${mm}-${dd}`;
-            dateInputElement.setAttribute('max', maxDate);
-            dateInputElement.setAttribute('min', '1930-01-01');
-        }
+            fetch('https://script.google.com/macros/s/AKfycbwGnEAdjWlfFSBLPkpWfYHusHNYjo475zP2TehHxJAhOpQeVaVyEqys94j1BO2k_0aOQA/exec', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                statusMsg.textContent = '✔ Dados enviados com sucesso!';
+                statusMsg.className = 'mensagem-status mensagem-sucesso';
+            })
+            .catch(error => {
+                statusMsg.textContent = '❌ Ocorreu um erro. Tente novamente.';
+                statusMsg.className = 'mensagem-status mensagem-erro';
+            });
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('cnpj')) document.getElementById('cnpj').value = urlParams.get('cnpj');
+        if (urlParams.has('razaoSocial')) document.getElementById('razao').value = urlParams.get('razaoSocial');
 
         function applyPhoneMask(element) {
             element.addEventListener('input', function(e) {
                 let value = e.target.value.replace(/\D/g, '');
                 let formattedValue = '';
-                if (value.length > 0) { formattedValue = `(${value.substring(0, 2)}`; }
+                if (value.length > 0) {
+                    formattedValue = `(${value.substring(0, 2)}`;
+                }
                 if (value.length > 2) {
-                    if (value.length > 10) {
+                    if (value.length > 10) { // Celular
                          formattedValue += `) ${value.substring(2, 7)}`;
-                         if (value.length > 7) { formattedValue += `-${value.substring(7, 11)}`; }
-                    } else {
+                         if (value.length > 7) {
+                            formattedValue += `-${value.substring(7, 11)}`;
+                         }
+                    } else { // Fixo
                         formattedValue += `) ${value.substring(2, 6)}`;
-                        if (value.length > 6) { formattedValue += `-${value.substring(6, 10)}`; }
+                        if (value.length > 6) {
+                            formattedValue += `-${value.substring(6, 10)}`;
+                        }
                     }
                 }
                 e.target.value = formattedValue;
-                
-                // Validação em tempo real
-                const isValid = validatePhone(e.target.value);
-                const contactItem = e.target.closest('.contact-item');
-                const index = Array.from(document.querySelectorAll('.contact-item')).indexOf(contactItem);
-                const errorElement = document.getElementById(`phone-error-${index}`);
-                
-                if (e.target.value && !isValid) {
-                    e.target.classList.add('input-error');
-                    if (errorElement) errorElement.style.display = 'block';
-                } else {
-                    e.target.classList.remove('input-error');
-                    if (errorElement) errorElement.style.display = 'none';
-                }
-            });
-        }
-
-        function applyEmailValidation(element, index) {
-            element.addEventListener('blur', function(e) {
-                const isUnique = validateUniqueEmail(e.target, index);
-                const errorElement = document.getElementById(`email-error-${index}`);
-                
-                if (e.target.value && !isUnique) {
-                    e.target.classList.add('input-error');
-                    if (errorElement) errorElement.style.display = 'block';
-                } else {
-                    e.target.classList.remove('input-error');
-                    if (errorElement) errorElement.style.display = 'none';
-                }
-            });
-        }
-
-        function applyNameValidation(element) {
-            element.addEventListener('blur', function(e) {
-                const isValid = validateFullName(e.target);
-                const parentBlock = e.target.closest('.item-block');
-                let errorElement = parentBlock.querySelector('.name-error');
-                
-                if (!errorElement) {
-                    errorElement = document.createElement('div');
-                    errorElement.className = 'error-message name-error';
-                    errorElement.textContent = 'Por favor, digite o nome completo (nome e sobrenome).';
-                    e.target.parentNode.insertBefore(errorElement, e.target.nextSibling);
-                }
-                
-                if (e.target.value && !isValid) {
-                    e.target.classList.add('input-error');
-                    errorElement.style.display = 'block';
-                } else {
-                    e.target.classList.remove('input-error');
-                    errorElement.style.display = 'none';
-                }
             });
         }
 
         function applyCurrencyMask(element) {
             element.addEventListener('input', function(e) {
                 let value = e.target.value.replace(/\D/g, '');
-                if (value === '') {
-                    e.target.value = '';
-                    return;
-                }
+                if (value === '') { return; }
                 let numberValue = parseInt(value, 10) / 100;
-                e.target.value = numberValue.toLocaleString('pt-BR', {
-                    style: 'currency', currency: 'BRL'
-                });
+                e.target.value = numberValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             });
         }
 
-        function applyCpfMask(element) {
-            element.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '').substring(0, 11);
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-                e.target.value = value;
-            });
-        }
+        applyPhoneMask(document.querySelector('input[name="telefone[]"]'));
+        applyCurrencyMask(document.getElementById('faturamento'));
 
-        function applyCnpjMask(element) {
-            element.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '').substring(0, 14);
-                value = value.replace(/^(\d{2})(\d)/, '$1.$2');
-                value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-                value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
-                value = value.replace(/(\d{4})(\d)/, '$1-$2');
-                e.target.value = value;
-            });
-        }
-
-        function applyDocumentValidation(element) {
-            element.addEventListener('blur', function(e) {
-                const documentType = document.querySelector('input[name="documentType"]:checked').value;
-                const errorElement = document.getElementById('documento-error');
-                let isValid = false;
-                
-                if (documentType === 'cnpj') {
-                    isValid = validateCNPJ(e.target.value);
-                    errorElement.textContent = 'CNPJ inválido.';
-                } else {
-                    isValid = validateCPF(e.target.value);
-                    errorElement.textContent = 'CPF inválido.';
-                }
-                
-                if (e.target.value && !isValid) {
-                    e.target.classList.add('input-error');
-                    errorElement.style.display = 'block';
-                } else {
-                    e.target.classList.remove('input-error');
-                    errorElement.style.display = 'none';
-                }
-            });
-        }
-
-        function updateDocumentField() {
-            const documentType = document.querySelector('input[name="documentType"]:checked').value;
-            const documentInput = document.getElementById('documento');
-            const documentLabel = document.getElementById('documento-label');
-            const razaoLabel = document.getElementById('razao-label');
-            const razaoInput = document.getElementById('razao');
+        document.querySelector('.btn-add').addEventListener('click', function() {
+            const contactCount = document.querySelectorAll('.contact-item').length;
+            const contactSection = document.querySelector('.contact-item');
+            const newContactItem = contactSection.cloneNode(true);
             
-            // Remove listeners antigos
-            const newDocumentInput = documentInput.cloneNode(true);
-            documentInput.parentNode.replaceChild(newDocumentInput, documentInput);
+            const removeButton = newContactItem.querySelector('.btn-remove');
+            removeButton.addEventListener('click', function() {
+                const parentSection = this.closest('section');
+                const itemToRemove = this.closest('.contact-item');
+
+                // Remove o header (Contato X) que precede o item
+                const headerToRemove = itemToRemove.previousElementSibling;
+                if (headerToRemove && headerToRemove.classList.contains('contact-header')) {
+                    headerToRemove.remove();
+                }
+                itemToRemove.remove();
+            });
             
-            if (documentType === 'cnpj') {
-                documentLabel.textContent = 'CNPJ:';
-                newDocumentInput.placeholder = '00.000.000/0000-00';
-                razaoLabel.textContent = 'Razão Social:';
-                razaoInput.placeholder = 'Digite a razão social da empresa';
-                applyCnpjMask(newDocumentInput);
-            } else {
-                documentLabel.textContent = 'CPF:';
-                newDocumentInput.placeholder = '000.000.000-00';
-                razaoLabel.textContent = 'Nome Completo:';
-                razaoInput.placeholder = 'Digite o nome completo';
-                applyCpfMask(newDocumentInput);
+            if (contactCount >= 1) { // Garante que o botão de remover aparece a partir do Contato 2
+                removeButton.classList.remove('hidden');
             }
-            
-            applyDocumentValidation(newDocumentInput);
-            newDocumentInput.value = '';
-        }
 
-        document.getElementById('reveal-button').addEventListener('click', function() {
-            document.getElementById('optional-section').classList.remove('hidden');
-            this.classList.add('hidden');
+            const newHeader = document.createElement('div');
+            newHeader.className = 'contact-header';
+            
+            const newTitle = document.createElement('h2');
+            newTitle.className = 'contact-title';
+            newTitle.textContent = `Contato ${contactCount + 1}`;
+            
+            newHeader.appendChild(newTitle);
+            
+            if (contactCount >= 1) {
+                newHeader.appendChild(removeButton);
+            }
+
+            // Insere o novo header e o novo bloco
+            this.parentNode.insertBefore(newHeader, this);
+            this.parentNode.insertBefore(newContactItem, this);
+
+            newContactItem.querySelectorAll('input, select').forEach(element => {
+                element.required = false;
+                if (element.type === 'checkbox') {
+                    element.checked = false;
+                } else {
+                    element.value = '';
+                }
+            });
+
+            const newPhoneInput = newContactItem.querySelector('input[name="telefone[]"]');
+            applyPhoneMask(newPhoneInput);
         });
-
-        function addContact() {
-            const container = document.getElementById('contact-section');
-            const count = container.querySelectorAll('.contact-item').length + 1;
-            const newContact = document.createElement('div');
-            newContact.className = 'contact-item item-block';
-            newContact.innerHTML = `
-                <div class="item-header"><h3>Contato ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove(); updateContactIndexes();">Remover</span></div>
-                <label>E-mail:</label><input type="email" name="email[]" placeholder="ex: contato@empresa.com">
-                <div class="error-message" id="email-error-${count - 1}">Este e-mail já foi cadastrado em outro contato.</div>
-                <label>Telefone:</label><input type="tel" name="telefone[]" placeholder="(DD) 99999-9999">
-                <div class="error-message" id="phone-error-${count - 1}">Telefone inválido. Verifique o DDD e evite sequências numéricas.</div>
-                <label>Departamento:</label><select name="departamento[]"><option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">RH</option><option value="Departamento Pessoal">DP</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option></select>
-                <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
-                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
-                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
-                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
-                <label class="checkbox-label" style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
-            `;
-            container.insertBefore(newContact, container.querySelector('.btn-add'));
-            
-            const phoneInput = newContact.querySelector('input[name="telefone[]"]');
-            const emailInput = newContact.querySelector('input[name="email[]"]');
-            
-            applyPhoneMask(phoneInput);
-            applyEmailValidation(emailInput, count - 1);
-        }
-
-        function updateContactIndexes() {
-            const contacts = document.querySelectorAll('.contact-item');
-            contacts.forEach((contact, index) => {
-                const emailError = contact.querySelector('.error-message[id^="email-error"]');
-                const phoneError = contact.querySelector('.error-message[id^="phone-error"]');
-                
-                if (emailError) emailError.id = `email-error-${index}`;
-                if (phoneError) phoneError.id = `phone-error-${index}`;
-                
-                const emailInput = contact.querySelector('input[name="email[]"]');
-                if (emailInput) {
-                    // Remove listeners antigos e adiciona novos com índice correto
-                    const newEmailInput = emailInput.cloneNode(true);
-                    emailInput.parentNode.replaceChild(newEmailInput, emailInput);
-                    applyEmailValidation(newEmailInput, index);
-                }
-            });
-        }
-
-        function addSocio() {
-            const container = document.getElementById('socios-container');
-            const count = container.querySelectorAll('.item-block').length + 1;
-            const newSocio = document.createElement('div');
-            newSocio.className = 'item-block';
-            newSocio.innerHTML = `<div class="item-header"><h3>Sócio ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Sócio:</label><input type="text" name="socio_nome[]" oninput="toggleCpfRequired(this)"><label>CPF do Sócio:</label><input type="text" name="socio_cpf[]" placeholder="000.000.000-00"><label>Data de Entrada:</label><input type="date" name="socio_data[]">`;
-            container.insertBefore(newSocio, container.querySelector('.btn-add'));
-            const dateInput = newSocio.querySelector('input[name="socio_data[]"]');
-            const nameInput = newSocio.querySelector('input[name="socio_nome[]"]');
-            setDateLimits(dateInput);
-            applyCpfMask(newSocio.querySelector('input[name="socio_cpf[]"]'));
-            applyNameValidation(nameInput);
-        }
-
-        function addColaborador() {
-            const container = document.getElementById('colaboradores-container');
-            const count = container.querySelectorAll('.item-block').length + 1;
-            const newColaborador = document.createElement('div');
-            newColaborador.className = 'item-block';
-            newColaborador.innerHTML = `<div class="item-header"><h3>Colaborador ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Colaborador:</label><input type="text" name="colaborador_nome[]" oninput="toggleCpfRequired(this)"><label>CPF do Colaborador:</label><input type="text" name="colaborador_cpf[]" placeholder="000.000.000-00"><label>Data de Admissão:</label><input type="date" name="colaborador_data[]">`;
-            container.insertBefore(newColaborador, container.querySelector('.btn-add'));
-            const dateInput = newColaborador.querySelector('input[name="colaborador_data[]"]');
-            const nameInput = newColaborador.querySelector('input[name="colaborador_nome[]"]');
-            setDateLimits(dateInput);
-            applyCpfMask(newColaborador.querySelector('input[name="colaborador_cpf[]"]'));
-            applyNameValidation(nameInput);
-        }
-
-        function toggleCpfRequired(nameInput) {
-            const parentBlock = nameInput.closest('.item-block');
-            const cpfInput = parentBlock.querySelector('input[name*="cpf"]');
-            if (nameInput.value.trim() !== '') {
-                cpfInput.required = true;
-            } else {
-                cpfInput.required = false;
-            }
-        }
-
-        // Função de validação antes do envio
-        function validateForm() {
-            let isValid = true;
-            const statusMsg = document.querySelector('.mensagem-status');
-            
-            // Validar documento
-            const documentInput = document.getElementById('documento');
-            const documentType = document.querySelector('input[name="documentType"]:checked').value;
-            const errorElement = document.getElementById('documento-error');
-            
-            if (documentInput.value) {
-                let documentValid = false;
-                if (documentType === 'cnpj') {
-                    documentValid = validateCNPJ(documentInput.value);
-                } else {
-                    documentValid = validateCPF(documentInput.value);
-                }
-                
-                if (!documentValid) {
-                    documentInput.classList.add('input-error');
-                    errorElement.style.display = 'block';
-                    isValid = false;
-                } else {
-                    documentInput.classList.remove('input-error');
-                    errorElement.style.display = 'none';
-                }
-            }
-            
-            // Validar telefones
-            const phoneInputs = document.querySelectorAll('input[name="telefone[]"]');
-            phoneInputs.forEach((input, index) => {
-                if (input.value && !validatePhone(input.value)) {
-                    input.classList.add('input-error');
-                    const errorElement = document.getElementById(`phone-error-${index}`);
-                    if (errorElement) errorElement.style.display = 'block';
-                    isValid = false;
-                }
-            });
-            
-            // Validar emails únicos
-            const emailInputs = document.querySelectorAll('input[name="email[]"]');
-            emailInputs.forEach((input, index) => {
-                if (input.value && !validateUniqueEmail(input, index)) {
-                    input.classList.add('input-error');
-                    const errorElement = document.getElementById(`email-error-${index}`);
-                    if (errorElement) errorElement.style.display = 'block';
-                    isValid = false;
-                }
-            });
-            
-            // Validar nomes completos
-            const nameInputs = document.querySelectorAll('input[name*="nome[]"]');
-            nameInputs.forEach(input => {
-                if (input.value && !validateFullName(input)) {
-                    input.classList.add('input-error');
-                    const parentBlock = input.closest('.item-block');
-                    let errorElement = parentBlock.querySelector('.name-error');
-                    if (errorElement) errorElement.style.display = 'block';
-                    isValid = false;
-                }
-            });
-            
-            // Validar campos obrigatórios para contatos com email preenchido
-            const contactItems = document.querySelectorAll('.contact-item');
-            contactItems.forEach((contact, index) => {
-                const emailInput = contact.querySelector('input[name="email[]"]');
-                const departmentSelect = contact.querySelector('select[name="departamento[]"]');
-                const communicationCheckboxes = contact.querySelectorAll('input[name="comunicacoes[]"]:checked');
-                
-                // Se o email estiver preenchido, departamento e comunicação são obrigatórios
-                if (emailInput && emailInput.value.trim()) {
-                    // Validar departamento
-                    if (!departmentSelect.value) {
-                        departmentSelect.classList.add('input-error');
-                        let errorElement = contact.querySelector('.department-error');
-                        if (!errorElement) {
-                            errorElement = document.createElement('div');
-                            errorElement.className = 'error-message department-error';
-                            errorElement.textContent = 'Por favor, selecione um departamento.';
-                            departmentSelect.parentNode.insertBefore(errorElement, departmentSelect.nextSibling);
-                        }
-                        errorElement.style.display = 'block';
-                        isValid = false;
-                    } else {
-                        departmentSelect.classList.remove('input-error');
-                        const errorElement = contact.querySelector('.department-error');
-                        if (errorElement) errorElement.style.display = 'none';
-                    }
-                    
-                    // Validar comunicação
-                    if (communicationCheckboxes.length === 0) {
-                        const communicationContainer = contact.querySelector('.comunicacao-titulo').parentNode;
-                        let errorElement = contact.querySelector('.communication-error');
-                        if (!errorElement) {
-                            errorElement = document.createElement('div');
-                            errorElement.className = 'error-message communication-error';
-                            errorElement.textContent = 'Por favor, selecione pelo menos um tipo de comunicação.';
-                            communicationContainer.appendChild(errorElement);
-                        }
-                        errorElement.style.display = 'block';
-                        isValid = false;
-                    } else {
-                        const errorElement = contact.querySelector('.communication-error');
-                        if (errorElement) errorElement.style.display = 'none';
-                    }
-                }
-            });
-            
-            if (!isValid) {
-                statusMsg.textContent = 'Por favor, corrija os erros destacados antes de enviar.';
-                statusMsg.className = 'mensagem-status mensagem-erro';
-                statusMsg.style.display = 'block';
-            }
-            
-            return isValid;
-        }
-
-        // Função de submissão do formulário
-        document.getElementById('formulario').addEventListener('submit', function (e) {
-            e.preventDefault();
-            
-            // Validar formulário antes de enviar
-            if (!validateForm()) {
-                return;
-            }
-            
-            const statusMsg = document.querySelector('.mensagem-status');
-            statusMsg.style.display = 'block';
-            const firstContact = document.querySelector('.contact-item');
-            if (!firstContact.querySelector('input[name="email[]"]').value || !firstContact.querySelector('input[name="telefone[]"]').value) {
-                statusMsg.textContent = 'Por favor, preencha pelo menos o e-mail e telefone do Contato 1.';
-                statusMsg.className = 'mensagem-status mensagem-erro';
-                return;
-            }
-            statusMsg.textContent = 'Enviando...';
-            statusMsg.className = 'mensagem-status';
-
-            // Pega o valor do documento e remove a máscara antes de enviar
-            const documentValue = document.getElementById('documento').value.replace(/\D/g, '');
-            const documentType = document.querySelector('input[name="documentType"]:checked').value;
-
-            const payload = {
-                // Envia tanto CNPJ quanto CPF para manter compatibilidade com a planilha
-                cnpj: documentType === 'cnpj' ? documentValue : '',
-                cpf: documentType === 'cpf' ? documentValue : '',
-                documentType: documentType,
-                razaoSocial: document.getElementById('razao').value,
-                faturamento: document.getElementById('faturamento').value,
-                funcionarios: document.getElementById('funcionarios').value,
-                contatos: Array.from(document.querySelectorAll('.contact-item')).map(item => ({ 
-                    email: item.querySelector('input[name="email[]"]').value, 
-                    telefone: item.querySelector('input[name="telefone[]"]').value, 
-                    departamento: item.querySelector('select[name="departamento[]"]').value, 
-                    preferencias: Array.from(item.querySelectorAll('input[name="comunicacoes[]"]:checked')).map(el => el.value) 
-                })).filter(c => c.email),
-                socios: Array.from(document.querySelectorAll('#socios-container .item-block')).map(item => ({ 
-                    nome: item.querySelector('input[name="socio_nome[]"]').value, 
-                    cpf: item.querySelector('input[name="socio_cpf[]"]').value, 
-                    data: item.querySelector('input[name="socio_data[]"]').value 
-                })).filter(s => s.nome),
-                colaboradores: Array.from(document.querySelectorAll('#colaboradores-container .item-block')).map(item => ({ 
-                    nome: item.querySelector('input[name="colaborador_nome[]"]').value, 
-                    cpf: item.querySelector('input[name="colaborador_cpf[]"]').value, 
-                    data: item.querySelector('input[name="colaborador_data[]"]').value 
-                })).filter(c => c.nome)
-            };
-            
-            const url = 'https://script.google.com/macros/s/AKfycbz_iWAlH4-4x5r6nYxRptYFlKsCXMQW_Q5ED9ejkAqm2mQ1T3559Zkz8P7wso8dAVB5/exec';
-            fetch(url, { 
-                method: 'POST', 
-                mode: 'no-cors', 
-                cache: 'no-cache', 
-                headers: { 'Content-Type': 'application/json' }, 
-                body: JSON.stringify(payload), 
-                redirect: 'follow' 
-            })
-            .then(res => {
-                statusMsg.textContent = '✅ Dados enviados com sucesso!📩';
-                statusMsg.className = 'mensagem-status mensagem-sucesso';
-                document.getElementById('formulario').reset();
-                document.getElementById('optional-section').classList.add('hidden');
-                document.getElementById('reveal-button').classList.remove('hidden');
-                // Resetar para CNPJ por padrão
-                document.querySelector('input[name="documentType"][value="cnpj"]').checked = true;
-                updateDocumentField();
-            }).catch(error => {
-                statusMsg.textContent = '❌ Ocorreu um erro. Tente novamente.';
-                statusMsg.className = 'mensagem-status mensagem-erro';
-            });
-        });
-
-        // Inicialização
-document.addEventListener('DOMContentLoaded', function() {
-    // Configurar listeners para mudança de tipo de documento
-    document.querySelectorAll('input[name="documentType"]').forEach(radio => {
-        radio.addEventListener('change', updateDocumentField);
-    });
-
-    // Verificar se há parâmetros na URL para pré-preenchimento
-    const urlParams = new URLSearchParams(window.location.search);
-    const cnpjInput = document.getElementById('documento');
-    const razaoInput = document.getElementById('razao');
-
-    if (urlParams.has('cnpj')) {
-        // Caso seja chamado da planilha
-        document.querySelector('input[name="documentType"][value="cnpj"]').checked = true;
-        updateDocumentField();
-        cnpjInput.value = urlParams.get('cnpj');
-        razaoInput.value = urlParams.get('razaoSocial') || "";
-
-        // Aplica máscara e bloqueia edição
-        applyCnpjMask(cnpjInput);
-        cnpjInput.readOnly = true;
-        razaoInput.readOnly = true;
-    } else {
-        // Caso seja preenchido manualmente
-        cnpjInput.readOnly = false;
-        razaoInput.readOnly = false;
-    }
-
-    // Aplicar máscaras e validações aos campos existentes
-    document.querySelectorAll('input[name="telefone[]"]').forEach(applyPhoneMask);
-    document.querySelectorAll('input[name="email[]"]').forEach((input, index) => {
-        applyEmailValidation(input, index);
-    });
-    applyCurrencyMask(document.getElementById('faturamento'));
-
-    // Configurar campo de documento inicial
-    updateDocumentField();
-});
-
     </script>
 </body>
 </html>
-

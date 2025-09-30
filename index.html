@@ -747,28 +747,39 @@
             };
             
             const url = 'https://script.google.com/macros/s/AKfycbw2sRVd49Kv-d5Rv9bJmIM5k8AbPgJp2KoJE4zLe_8rzelEsBrA2xCiCiaTOYMkuw6uwA/exec';
+            
+            // --- INÍCIO DA CORREÇÃO ---
             fetch(url, { 
-                method: 'POST', 
-                mode: 'no-cors', 
+                method: 'POST',
+                // mode: 'no-cors', // REMOVIDO
                 cache: 'no-cache', 
                 headers: { 'Content-Type': 'application/json' }, 
-                body: JSON.stringify(payload), 
+                body: JSON.stringify(payload ), 
                 redirect: 'follow' 
             })
-            .then(res => {
-                statusMsg.textContent = '✅ Dados enviados com sucesso!📩';
-                statusMsg.className = 'mensagem-status mensagem-sucesso';
-                document.getElementById('formulario').reset();
-                document.getElementById('optional-section').classList.add('hidden');
-                document.getElementById('reveal-button').classList.remove('hidden');
-                // Resetar para CNPJ por padrão
-                document.querySelector('input[name="documentType"][value="cnpj"]').checked = true;
-                updateDocumentField();
+            // --- FIM DA CORREÇÃO ---
+            .then(response => response.json()) // Adicionado para processar a resposta do servidor
+            .then(data => {
+                // Agora verificamos a resposta real do Google Apps Script
+                if (data.status === "success") {
+                    statusMsg.textContent = '✅ Dados enviados com sucesso!📩';
+                    statusMsg.className = 'mensagem-status mensagem-sucesso';
+                    document.getElementById('formulario').reset();
+                    document.getElementById('optional-section').classList.add('hidden');
+                    document.getElementById('reveal-button').classList.remove('hidden');
+                    document.querySelector('input[name="documentType"][value="cnpj"]').checked = true;
+                    updateDocumentField();
+                } else {
+                    // Se o Google Script retornar um erro, mostramos aqui
+                    throw new Error(data.message || 'O servidor retornou um erro.');
+                }
             }).catch(error => {
-                statusMsg.textContent = '❌ Ocorreu um erro. Tente novamente.';
+                console.error('Erro no Fetch:', error); // Adicionado para depuração no console do navegador
+                statusMsg.textContent = '❌ Ocorreu um erro na comunicação. Tente novamente.';
                 statusMsg.className = 'mensagem-status mensagem-erro';
             });
         });
+
 
                // Inicialização
         document.addEventListener('DOMContentLoaded', function() {

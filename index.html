@@ -1,13 +1,14 @@
+
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atualização Cadastral - Sescon-SP</title>
-    <link rel="icon" href="https://sescon.org.br/wp-content/uploads/2020/09/cropped-favicon-32x32.png" sizes="32x32">
-    <link rel="icon" href="https://sescon.org.br/wp-content/uploads/2020/09/cropped-favicon-192x192.png" sizes="192x192">
-    
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Atualização Cadastral - Sescon-SP</title>
+<link href="https://sescon.org.br/wp-content/uploads/2020/09/cropped-favicon-32x32.png" rel="icon" sizes="32x32"/>
+<link href="https://sescon.org.br/wp-content/uploads/2020/09/cropped-favicon-192x192.png" rel="icon" sizes="192x192"/>
+<style>
         body { margin: 0; font-family: 'Roboto', Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: url('https://i.imgur.com/iE3JKYM.png' ) no-repeat center center fixed; background-size: cover; padding: 20px 0; }
         .container { background-color: rgba(0, 151, 206, 0.6); padding: 22px; border-radius: 12px; width: 100%; max-width: 600px; color: #fff; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); }
         h1 { text-align: center; color: #fff; margin-bottom: 5px; font-size: 1.7em; }
@@ -38,96 +39,76 @@
         .input-error { border-color: #d32f2f !important; }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Atualize seus dados cadastrais conosco</h1>
-        <p class="subtitulo-sescon">Sescon - SP</p>
-        <p class="descricao">Preencha corretamente as informações. Pelo menos um contato é obrigatório para garantirmos a comunicação eficaz.</p>
-
-        <form id="formulario">
-            <section>
-               <h2>1. Identificação da Empresa</h2>
+<body><div style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;"><label for="razão social" style="display: block; margin-top: 15px;">Razão Social:</label><input id="razão social" name="razão social" style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;" type="text"/><label for="cnpj" style="display: block; margin-top: 15px;">CNPJ:</label><input id="cnpj" name="cnpj" style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;" type="text"/>
+<div class="container">
+<h1>Atualize seus dados cadastrais conosco</h1>
+<p class="subtitulo-sescon">Sescon - SP</p>
+<p class="descricao">Preencha corretamente as informações. Pelo menos um contato é obrigatório para garantirmos a comunicação eficaz.</p>
+<form id="formulario">
+<section>
+<h2>1. Identificação da Empresa</h2>
 <label for="cnpj">CNPJ:</label>
-<input type="text" id="cnpj" name="cnpj" readonly>
-
+<input id="cnpj" name="cnpj" readonly="" type="text"/>
 <label for="razao">Razão Social:</label>
-<input type="text" id="razao" name="razaoSocial" readonly>
+<input id="razao" name="razao" readonly="" type="text"/>
 </section>
-
 <section id="contact-section">
-  <h2>2. Contatos</h2>
-  <div class="contact-item">
-    <div class="item-header"><h3>Contato 1 (Obrigatório)</h3></div>
-
-    <label>Este e-mail receberá os comunicados selecionados abaixo:</label>
-    <input type="email" name="email[]" placeholder="ex: contato@empresa.com" required>
-    <div class="error-message" id="email-error-0">Este e-mail já foi cadastrado em outro contato.</div>
-
-    <label>Telefone:</label>
-    <input type="tel" name="telefone[]" placeholder="(DD) 99999-9999" required>
-    <div class="error-message" id="phone-error-0">Telefone inválido. Verifique o DDD e evite sequências numéricas.</div>
-
-    <label>Departamento:</label>
-    <select name="departamento[]" required>
-      <option value="">Selecione</option>
-      <option value="Socio">Sócio</option>
-      <option value="Diretoria">Diretoria</option>
-      <option value="Recursos Humanos">Recursos Humanos (RH)</option>
-      <option value="Departamento Pessoal">Departamento Pessoal</option>
-      <option value="Financeiro">Financeiro</option>
-      <option value="Contabilidade">Contabilidade</option>
-      <option value="Juridico">Jurídico</option>
-      <option value="Marketing">Marketing</option>
-      <option value="Outros">Outros</option>
-    </select>
-
-    <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
-    <label class="checkbox-label"><input type="checkbox" name="preferencias[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
-    <label class="checkbox-label"><input type="checkbox" name="preferencias[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
-    <label class="checkbox-label"><input type="checkbox" name="preferencias[]" value="Assembleias"> Convocações para Assembleias</label>
-    <label class="checkbox-label" style="margin-bottom: 20px;"><input type="checkbox" name="preferencias[]" value="Noticias"> Notícias e Informativos Gerais</label>
-  </div>
+<h2>2. Contatos</h2>
+<div class="contact-item">
+<div class="item-header"><h3>Contato 1 (Obrigatório)</h3></div>
+<label>Este e-mail receberá os comunicados selecionados abaixo:</label>
+<input name="email[]" placeholder="ex: contato@empresa.com" required="" type="email"/>
+<div class="error-message" id="email-error-0">Este e-mail já foi cadastrado em outro contato.</div>
+<label>Telefone:</label>
+<input name="telefone[]" placeholder="(DD) 99999-9999" required="" type="tel"/>
+<div class="error-message" id="phone-error-0">Telefone inválido. Verifique o DDD e evite sequências numéricas.</div>
+<label>Departamento:</label>
+<select name="departamento[]" required="">
+<option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">Recursos Humanos (RH)</option><option value="Departamento Pessoal">Departamento Pessoal</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option>
+</select>
+<p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
+<label class="checkbox-label"><input name="comunicacoes[]" type="checkbox" value="Boletos"/> Boletos e Comunicados Financeiros</label>
+<label class="checkbox-label"><input name="comunicacoes[]" type="checkbox" value="Cursos"/> Cursos, eventos e outros produtos e serviços</label>
+<label class="checkbox-label"><input name="comunicacoes[]" type="checkbox" value="Assembleias"/> Convocações para Assembleias</label>
+<label class="checkbox-label" style="margin-bottom: 20px;"><input name="comunicacoes[]" type="checkbox" value="Noticias"/> Notícias e Informativos Gerais</label>
+</div>
+<button class="btn-add" onclick="addContact()" type="button">+ Adicionar Contato</button>
 </section>
-
-            <section>
-                <h2>3. Informações da Empresa</h2>
-                <label for="faturamento">Faturamento Bruto Anual (para cálculo das contribuições):</label>
-                <input type="text" id="faturamento" name="faturamento" placeholder="Ex: R$ 1.200.000,00" required>
-                <label for="funcionarios">Quantidade de Funcionários:</label>
-                <input type="number" id="funcionarios" name="funcionarios" placeholder="Ex: 25" min="0" required>
-            </section>
-
-            <section>
-                <h2>4. Sócios e Colaboradores (Opcional)</h2>
-                <button type="button" class="btn-reveal" id="reveal-button">Deseja atualizar sócios ou colaboradores? Clique aqui</button>
-                <div id="optional-section" class="hidden">
-                    <div id="socios-container">
-                        <div class="item-header" style="margin-top: 15px;"><h3>Sócios</h3></div>
-                        <button type="button" class="btn-add" onclick="addSocio()">+ Adicionar Sócio</button>
-                    </div>
-                    <div id="colaboradores-container" class="item-block">
-                        <div class="item-header"><h3>Colaboradores</h3></div>
-                        <button type="button" class="btn-add" onclick="addColaborador()">+ Adicionar Colaborador</button>
-                    </div>
-                </div>
-            </section>
-
-            <button type="submit" class="btn-submit">Enviar Atualização</button>
-            <p class="mensagem-status"></p>
-        </form>
-        <div class="aviso-tratamento">
-            <p>
-                <strong>Aviso de Tratamento de Dados:</strong> As informações fornecidas para atualização do cadastro serão tratadas pelo Sescon-SP em conformidade 
+<section>
+<h2>3. Informações da Empresa</h2>
+<label for="faturamento">Faturamento Bruto Anual (para cálculo das contribuições):</label>
+<input id="faturamento" name="faturamento" placeholder="Ex: R$ 1.200.000,00" required="" type="text"/>
+<label for="funcionarios">Quantidade de Funcionários:</label>
+<input id="funcionarios" min="0" name="funcionarios" placeholder="Ex: 25" required="" type="number"/>
+</section>
+<section>
+<h2>4. Sócios e Colaboradores (Opcional)</h2>
+<button class="btn-reveal" id="reveal-button" type="button">Deseja atualizar sócios ou colaboradores? Clique aqui</button>
+<div class="hidden" id="optional-section">
+<div id="socios-container">
+<div class="item-header" style="margin-top: 15px;"><h3>Sócios</h3></div>
+<button class="btn-add" onclick="addSocio()" type="button">+ Adicionar Sócio</button>
+</div>
+<div class="item-block" id="colaboradores-container">
+<div class="item-header"><h3>Colaboradores</h3></div>
+<button class="btn-add" onclick="addColaborador()" type="button">+ Adicionar Colaborador</button>
+</div>
+</div>
+</section>
+<button class="btn-submit" type="submit">Enviar Atualização</button>
+<p class="mensagem-status"></p>
+</form>
+<div class="aviso-tratamento">
+<p>
+<strong>Aviso de Tratamento de Dados:</strong> As informações fornecidas para atualização do cadastro serão tratadas pelo Sescon-SP em conformidade 
                 com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 – LGPD), com a finalidade de assegurar o correto enquadramento sindical, 
                 o cumprimento de obrigações legais e a manutenção da comunicação institucional com os representados.  
                 Consulte nossa <a href="https://sescon.org.br/wp-content/uploads/2025/05/POLITICA-DE-PRIVACIDADE-E-COOKIES-1.pdf" target="_blank">Política de Privacidade</a>.
             </p>
-        </div>
-
-        <footer><img src="https://i.imgur.com/zWWSzuu.png" alt="Logo Sescon-SP" class="logo"></footer>
-    </div>
-
-    <script>
+</div>
+<footer><img alt="Logo Sescon-SP" class="logo" src="https://i.imgur.com/zWWSzuu.png"/></footer>
+</div>
+<script>
         // Lista de DDDs válidos no Brasil
         const validDDDs = [
             '11', '12', '13', '14', '15', '16', '17', '18', '19', // São Paulo
@@ -647,5 +628,5 @@ document.getElementById('formulario').addEventListener('submit', function (e) {
         });
         applyCurrencyMask(document.getElementById('faturamento'));
     </script>
-</body>
+</div></body>
 </html>

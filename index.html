@@ -46,35 +46,48 @@
 
         <form id="formulario">
             <section>
-                <h2>1. Identificação da Empresa</h2>
-                <label for="cnpj">CNPJ:</label>
-                <input type="text" id="cnpj" name="cnpj" readonly>
-                <label for="razao">Razão Social:</label>
-                <input type="text" id="razao" name="razao" readonly>
-            </section>
+               <h2>1. Identificação da Empresa</h2>
+<label for="cnpj">CNPJ:</label>
+<input type="text" id="cnpj" name="cnpj" readonly>
 
-            <section id="contact-section">
-                <h2>2. Contatos</h2>
-                <div class="contact-item">
-                    <div class="item-header"><h3>Contato 1 (Obrigatório)</h3></div>
-                    <label>Este e-mail receberá os comunicados selecionados abaixo:</label>
-                    <input type="email" name="email[]" placeholder="ex: contato@empresa.com" required>
-                    <div class="error-message" id="email-error-0">Este e-mail já foi cadastrado em outro contato.</div>
-                    <label>Telefone:</label>
-                    <input type="tel" name="telefone[]" placeholder="(DD) 99999-9999" required>
-                    <div class="error-message" id="phone-error-0">Telefone inválido. Verifique o DDD e evite sequências numéricas.</div>
-                    <label>Departamento:</label>
-                    <select name="departamento[]" required>
-                        <option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">Recursos Humanos (RH)</option><option value="Departamento Pessoal">Departamento Pessoal</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option>
-                    </select>
-                    <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
-                    <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
-                    <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
-                    <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
-                    <label class="checkbox-label" style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
-                </div>
-                <button type="button" class="btn-add" onclick="addContact()">+ Adicionar Contato</button>
-            </section>
+<label for="razao">Razão Social:</label>
+<input type="text" id="razao" name="razaoSocial" readonly>
+</section>
+
+<section id="contact-section">
+  <h2>2. Contatos</h2>
+  <div class="contact-item">
+    <div class="item-header"><h3>Contato 1 (Obrigatório)</h3></div>
+
+    <label>Este e-mail receberá os comunicados selecionados abaixo:</label>
+    <input type="email" name="email[]" placeholder="ex: contato@empresa.com" required>
+    <div class="error-message" id="email-error-0">Este e-mail já foi cadastrado em outro contato.</div>
+
+    <label>Telefone:</label>
+    <input type="tel" name="telefone[]" placeholder="(DD) 99999-9999" required>
+    <div class="error-message" id="phone-error-0">Telefone inválido. Verifique o DDD e evite sequências numéricas.</div>
+
+    <label>Departamento:</label>
+    <select name="departamento[]" required>
+      <option value="">Selecione</option>
+      <option value="Socio">Sócio</option>
+      <option value="Diretoria">Diretoria</option>
+      <option value="Recursos Humanos">Recursos Humanos (RH)</option>
+      <option value="Departamento Pessoal">Departamento Pessoal</option>
+      <option value="Financeiro">Financeiro</option>
+      <option value="Contabilidade">Contabilidade</option>
+      <option value="Juridico">Jurídico</option>
+      <option value="Marketing">Marketing</option>
+      <option value="Outros">Outros</option>
+    </select>
+
+    <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
+    <label class="checkbox-label"><input type="checkbox" name="preferencias[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
+    <label class="checkbox-label"><input type="checkbox" name="preferencias[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
+    <label class="checkbox-label"><input type="checkbox" name="preferencias[]" value="Assembleias"> Convocações para Assembleias</label>
+    <label class="checkbox-label" style="margin-bottom: 20px;"><input type="checkbox" name="preferencias[]" value="Noticias"> Notícias e Informativos Gerais</label>
+  </div>
+</section>
 
             <section>
                 <h2>3. Informações da Empresa</h2>

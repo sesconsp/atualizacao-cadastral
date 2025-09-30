@@ -23,9 +23,11 @@
         .btn-add, .btn-submit, .btn-reveal { background-color: #fff; color: #0097ce; padding: 12px 20px; border: 1px solid #0097ce; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; display: inline-block; transition: all 0.3s ease; }
         .btn-add:hover, .btn-submit:hover, .btn-reveal:hover { background-color: #0097ce; color: #fff; }
         .btn-submit, .btn-reveal { width: 100%; margin-top: 10px; }
+        .btn-submit:disabled { background-color: #ccc; color: #666; cursor: not-allowed; border-color: #ccc; }
         .mensagem-status { text-align: center; font-size: 1.1em; margin-top: 15px; display: none; padding: 10px; border-radius: 6px; }
         .mensagem-sucesso { background-color: #d4edda; color: #155724; }
         .mensagem-erro { background-color: #f8d7da; color: #721c24; }
+        .mensagem-info { background-color: #d1ecf1; color: #0c5460; }
         footer { text-align: center; margin-top: 30px; }
         footer .logo { display: block; margin: 0 auto; max-width: 140px; height: auto; }
         .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -40,6 +42,8 @@
         .document-type-selector label { display: flex; align-items: center; font-weight: normal; margin-bottom: 0; cursor: pointer; }
         .document-type-selector input[type="radio"] { width: auto; margin-right: 8px; }
         .field-group { margin-bottom: 15px; }
+        .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #0097ce; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -54,11 +58,11 @@
                 
                 <div class="document-type-selector">
                     <label>
-                        <input type="radio" name="documentType" value="cnpj" checked>
+                        <input type="radio" name="documentType" value="cnpj" checked onchange="updateDocumentType()">
                         Pessoa Jurídica (CNPJ)
                     </label>
                     <label>
-                        <input type="radio" name="documentType" value="cpf">
+                        <input type="radio" name="documentType" value="cpf" onchange="updateDocumentType()">
                         Pessoa Física (CPF)
                     </label>
                 </div>
@@ -108,7 +112,7 @@
 
             <section>
                 <h2>4. Sócios e Colaboradores (Opcional)</h2>
-                <button type="button" class="btn-reveal" id="reveal-button">Deseja atualizar sócios ou colaboradores? Clique aqui</button>
+                <button type="button" class="btn-reveal" id="reveal-button" onclick="toggleOptionalSection()">Deseja atualizar sócios ou colaboradores? Clique aqui</button>
                 <div id="optional-section" class="hidden">
                     <div id="socios-container">
                         <div class="item-header" style="margin-top: 15px;"><h3>Sócios</h3></div>
@@ -121,9 +125,10 @@
                 </div>
             </section>
 
-            <button type="submit" class="btn-submit">Enviar Atualização</button>
-            <p class="mensagem-status"></p>
+            <button type="submit" class="btn-submit" id="submit-btn">Enviar Atualização</button>
+            <p class="mensagem-status" id="status-message"></p>
         </form>
+        
         <div class="aviso-tratamento">
             <p>
                 <strong>Aviso de Tratamento de Dados:</strong> As informações fornecidas para atualização do cadastro serão tratadas pelo Sescon-SP em conformidade 
@@ -137,6 +142,10 @@
     </div>
 
     <script>
+        // IMPORTANTE: Substitua esta URL pela URL atual do seu Google Apps Script
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2sRVd49Kv-d5Rv9bJmIM5k8AbPgJp2KoJE4zLe_8rzelEsBrA2xCiCiaTOYMkuw6uwA/exec';
+
+        
         // Lista de DDDs válidos no Brasil
         const validDDDs = [
             '11', '12', '13', '14', '15', '16', '17', '18', '19', // São Paulo
@@ -168,27 +177,71 @@
             '98', '99' // Maranhão
         ];
 
+        // Função para mostrar mensagem de status
+        function showStatusMessage(message, type = 'info') {
+            const statusMsg = document.getElementById('status-message');
+            statusMsg.textContent = message;
+            statusMsg.className = `mensagem-status mensagem-${type}`;
+            statusMsg.style.display = 'block';
+        }
+
+        // Função para limpar mensagem de status
+        function clearStatusMessage() {
+            const statusMsg = document.getElementById('status-message');
+            statusMsg.style.display = 'none';
+        }
+
+        // Função para alternar seção opcional
+        function toggleOptionalSection() {
+            const section = document.getElementById('optional-section');
+            const button = document.getElementById('reveal-button');
+            
+            if (section.classList.contains('hidden')) {
+                section.classList.remove('hidden');
+                button.textContent = 'Ocultar seção de sócios e colaboradores';
+            } else {
+                section.classList.add('hidden');
+                button.textContent = 'Deseja atualizar sócios ou colaboradores? Clique aqui';
+            }
+        }
+
+        // Função para atualizar tipo de documento
+        function updateDocumentType() {
+            const documentType = document.querySelector('input[name="documentType"]:checked').value;
+            const documentLabel = document.getElementById('documento-label');
+            const documentInput = document.getElementById('documento');
+            const razaoLabel = document.getElementById('razao-label');
+            
+            if (documentType === 'cpf') {
+                documentLabel.textContent = 'CPF:';
+                documentInput.placeholder = '000.000.000-00';
+                razaoLabel.textContent = 'Nome Completo:';
+            } else {
+                documentLabel.textContent = 'CNPJ:';
+                documentInput.placeholder = '00.000.000/0000-00';
+                razaoLabel.textContent = 'Razão Social:';
+            }
+            
+            // Limpa o campo e remove erros
+            documentInput.value = '';
+            documentInput.classList.remove('input-error');
+            document.getElementById('documento-error').style.display = 'none';
+        }
+
+        // Função de validação de telefone
         function validatePhone(phoneNumber) {
-            // Remove todos os caracteres não numéricos
             const cleanPhone = phoneNumber.replace(/\D/g, '');
             
-            // Verifica se tem 10 ou 11 dígitos
             if (cleanPhone.length !== 10 && cleanPhone.length !== 11) {
                 return false;
             }
             
-            // Extrai o DDD
             const ddd = cleanPhone.substring(0, 2);
-            
-            // Verifica se o DDD é válido
             if (!validDDDs.includes(ddd)) {
                 return false;
             }
             
-            // Extrai o número sem DDD
             const number = cleanPhone.substring(2);
-            
-            // Verifica sequências numéricas inválidas
             const invalidSequences = [
                 '11111111', '1111111', '111111', '11111',
                 '22222222', '2222222', '222222', '22222',
@@ -199,28 +252,9 @@
                 '77777777', '7777777', '777777', '77777',
                 '88888888', '8888888', '888888', '88888',
                 '99999999', '9999999', '999999', '99999',
-                '00000000', '0000000', '000000', '00000',
-                '12345678', '1234567', '123456', '12345',
-                '23456789', '2345678', '234567', '23456',
-                '34567890', '3456789', '345678', '34567',
-                '45678901', '4567890', '456789', '45678',
-                '56789012', '5678901', '567890', '56789',
-                '67890123', '6789012', '678901', '67890',
-                '78901234', '7890123', '789012', '78901',
-                '89012345', '8901234', '890123', '89012',
-                '90123456', '9012345', '901234', '90123',
-                '01234567', '0123456', '012345', '01234',
-                '87654321', '8765432', '876543', '87654',
-                '76543210', '7654321', '765432', '76543',
-                '65432109', '6543210', '654321', '65432',
-                '54321098', '5432109', '543210', '54321',
-                '43210987', '4321098', '432109', '43210',
-                '32109876', '3210987', '321098', '32109',
-                '21098765', '2109876', '210987', '21098',
-                '10987654', '1098765', '109876', '10987'
+                '00000000', '0000000', '000000', '00000'
             ];
             
-            // Verifica se o número contém alguma sequência inválida
             for (let seq of invalidSequences) {
                 if (number.includes(seq)) {
                     return false;
@@ -230,39 +264,13 @@
             return true;
         }
 
-        function validateUniqueEmail(emailInput, currentIndex) {
-            const currentEmail = emailInput.value.toLowerCase().trim();
-            if (!currentEmail) return true;
-            
-            const allEmails = document.querySelectorAll('input[name="email[]"]');
-            for (let i = 0; i < allEmails.length; i++) {
-                if (i !== currentIndex && allEmails[i].value.toLowerCase().trim() === currentEmail) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        function validateFullName(nameInput) {
-            const name = nameInput.value.trim();
-            if (!name) return true; // Campo vazio é válido se não for obrigatório
-            
-            // Remove espaços extras e divide em palavras
-            const words = name.split(/\s+/).filter(word => word.length > 0);
-            
-            // Verifica se tem pelo menos 2 palavras (nome e sobrenome)
-            return words.length >= 2;
-        }
-
+        // Função de validação de CNPJ
         function validateCNPJ(cnpj) {
             cnpj = cnpj.replace(/\D/g, '');
             
             if (cnpj.length !== 14) return false;
-            
-            // Elimina CNPJs inválidos conhecidos
             if (/^(\d)\1+$/.test(cnpj)) return false;
             
-            // Valida DVs
             let tamanho = cnpj.length - 2;
             let numeros = cnpj.substring(0, tamanho);
             let digitos = cnpj.substring(tamanho);
@@ -288,301 +296,39 @@
             }
             
             resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-            if (resultado != digitos.charAt(1)) return false;
-            
-            return true;
+            return resultado == digitos.charAt(1);
         }
 
+        // Função de validação de CPF
         function validateCPF(cpf) {
             cpf = cpf.replace(/\D/g, '');
             
             if (cpf.length !== 11) return false;
-            
-            // Elimina CPFs inválidos conhecidos
             if (/^(\d)\1+$/.test(cpf)) return false;
             
-            // Valida 1º dígito
             let soma = 0;
             for (let i = 0; i < 9; i++) {
                 soma += parseInt(cpf.charAt(i)) * (10 - i);
             }
+            
             let resto = 11 - (soma % 11);
             if (resto === 10 || resto === 11) resto = 0;
             if (resto !== parseInt(cpf.charAt(9))) return false;
             
-            // Valida 2º dígito
             soma = 0;
             for (let i = 0; i < 10; i++) {
                 soma += parseInt(cpf.charAt(i)) * (11 - i);
             }
+            
             resto = 11 - (soma % 11);
             if (resto === 10 || resto === 11) resto = 0;
-            if (resto !== parseInt(cpf.charAt(10))) return false;
-            
-            return true;
+            return resto === parseInt(cpf.charAt(10));
         }
 
-        function setDateLimits(dateInputElement) {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            const maxDate = `${yyyy}-${mm}-${dd}`;
-            dateInputElement.setAttribute('max', maxDate);
-            dateInputElement.setAttribute('min', '1930-01-01');
-        }
-
-        function applyPhoneMask(element) {
-            element.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                let formattedValue = '';
-                if (value.length > 0) { formattedValue = `(${value.substring(0, 2)}`; }
-                if (value.length > 2) {
-                    if (value.length > 10) {
-                         formattedValue += `) ${value.substring(2, 7)}`;
-                         if (value.length > 7) { formattedValue += `-${value.substring(7, 11)}`; }
-                    } else {
-                        formattedValue += `) ${value.substring(2, 6)}`;
-                        if (value.length > 6) { formattedValue += `-${value.substring(6, 10)}`; }
-                    }
-                }
-                e.target.value = formattedValue;
-                
-                // Validação em tempo real
-                const isValid = validatePhone(e.target.value);
-                const contactItem = e.target.closest('.contact-item');
-                const index = Array.from(document.querySelectorAll('.contact-item')).indexOf(contactItem);
-                const errorElement = document.getElementById(`phone-error-${index}`);
-                
-                if (e.target.value && !isValid) {
-                    e.target.classList.add('input-error');
-                    if (errorElement) errorElement.style.display = 'block';
-                } else {
-                    e.target.classList.remove('input-error');
-                    if (errorElement) errorElement.style.display = 'none';
-                }
-            });
-        }
-
-        function applyEmailValidation(element, index) {
-            element.addEventListener('blur', function(e) {
-                const isUnique = validateUniqueEmail(e.target, index);
-                const errorElement = document.getElementById(`email-error-${index}`);
-                
-                if (e.target.value && !isUnique) {
-                    e.target.classList.add('input-error');
-                    if (errorElement) errorElement.style.display = 'block';
-                } else {
-                    e.target.classList.remove('input-error');
-                    if (errorElement) errorElement.style.display = 'none';
-                }
-            });
-        }
-
-        function applyNameValidation(element) {
-            element.addEventListener('blur', function(e) {
-                const isValid = validateFullName(e.target);
-                const parentBlock = e.target.closest('.item-block');
-                let errorElement = parentBlock.querySelector('.name-error');
-                
-                if (!errorElement) {
-                    errorElement = document.createElement('div');
-                    errorElement.className = 'error-message name-error';
-                    errorElement.textContent = 'Por favor, digite o nome completo (nome e sobrenome).';
-                    e.target.parentNode.insertBefore(errorElement, e.target.nextSibling);
-                }
-                
-                if (e.target.value && !isValid) {
-                    e.target.classList.add('input-error');
-                    errorElement.style.display = 'block';
-                } else {
-                    e.target.classList.remove('input-error');
-                    errorElement.style.display = 'none';
-                }
-            });
-        }
-
-        function applyCurrencyMask(element) {
-            element.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value === '') {
-                    e.target.value = '';
-                    return;
-                }
-                let numberValue = parseInt(value, 10) / 100;
-                e.target.value = numberValue.toLocaleString('pt-BR', {
-                    style: 'currency', currency: 'BRL'
-                });
-            });
-        }
-
-        function applyCpfMask(element) {
-            element.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '').substring(0, 11);
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-                e.target.value = value;
-            });
-        }
-
-        function applyCnpjMask(element) {
-            element.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '').substring(0, 14);
-                value = value.replace(/^(\d{2})(\d)/, '$1.$2');
-                value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-                value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
-                value = value.replace(/(\d{4})(\d)/, '$1-$2');
-                e.target.value = value;
-            });
-        }
-
-        function applyDocumentValidation(element) {
-            element.addEventListener('blur', function(e) {
-                const documentType = document.querySelector('input[name="documentType"]:checked').value;
-                const errorElement = document.getElementById('documento-error');
-                let isValid = false;
-                
-                if (documentType === 'cnpj') {
-                    isValid = validateCNPJ(e.target.value);
-                    errorElement.textContent = 'CNPJ inválido.';
-                } else {
-                    isValid = validateCPF(e.target.value);
-                    errorElement.textContent = 'CPF inválido.';
-                }
-                
-                if (e.target.value && !isValid) {
-                    e.target.classList.add('input-error');
-                    errorElement.style.display = 'block';
-                } else {
-                    e.target.classList.remove('input-error');
-                    errorElement.style.display = 'none';
-                }
-            });
-        }
-
-        function updateDocumentField() {
-            const documentType = document.querySelector('input[name="documentType"]:checked').value;
-            const documentInput = document.getElementById('documento');
-            const documentLabel = document.getElementById('documento-label');
-            const razaoLabel = document.getElementById('razao-label');
-            const razaoInput = document.getElementById('razao');
-            
-            // Remove listeners antigos
-            const newDocumentInput = documentInput.cloneNode(true);
-            documentInput.parentNode.replaceChild(newDocumentInput, documentInput);
-            
-            if (documentType === 'cnpj') {
-                documentLabel.textContent = 'CNPJ:';
-                newDocumentInput.placeholder = '00.000.000/0000-00';
-                razaoLabel.textContent = 'Razão Social:';
-                razaoInput.placeholder = 'Digite a razão social da empresa';
-                applyCnpjMask(newDocumentInput);
-            } else {
-                documentLabel.textContent = 'CPF:';
-                newDocumentInput.placeholder = '000.000.000-00';
-                razaoLabel.textContent = 'Nome Completo:';
-                razaoInput.placeholder = 'Digite o nome completo';
-                applyCpfMask(newDocumentInput);
-            }
-            
-            applyDocumentValidation(newDocumentInput);
-            newDocumentInput.value = '';
-        }
-
-        document.getElementById('reveal-button').addEventListener('click', function() {
-            document.getElementById('optional-section').classList.remove('hidden');
-            this.classList.add('hidden');
-        });
-
-        function addContact() {
-            const container = document.getElementById('contact-section');
-            const count = container.querySelectorAll('.contact-item').length + 1;
-            const newContact = document.createElement('div');
-            newContact.className = 'contact-item item-block';
-            newContact.innerHTML = `
-                <div class="item-header"><h3>Contato ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove(); updateContactIndexes();">Remover</span></div>
-                <label>E-mail:</label><input type="email" name="email[]" placeholder="ex: contato@empresa.com">
-                <div class="error-message" id="email-error-${count - 1}">Este e-mail já foi cadastrado em outro contato.</div>
-                <label>Telefone:</label><input type="tel" name="telefone[]" placeholder="(DD) 99999-9999">
-                <div class="error-message" id="phone-error-${count - 1}">Telefone inválido. Verifique o DDD e evite sequências numéricas.</div>
-                <label>Departamento:</label><select name="departamento[]"><option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">RH</option><option value="Departamento Pessoal">DP</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option></select>
-                <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
-                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
-                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
-                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
-                <label class="checkbox-label" style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
-            `;
-            container.insertBefore(newContact, container.querySelector('.btn-add'));
-            
-            const phoneInput = newContact.querySelector('input[name="telefone[]"]');
-            const emailInput = newContact.querySelector('input[name="email[]"]');
-            
-            applyPhoneMask(phoneInput);
-            applyEmailValidation(emailInput, count - 1);
-        }
-
-        function updateContactIndexes() {
-            const contacts = document.querySelectorAll('.contact-item');
-            contacts.forEach((contact, index) => {
-                const emailError = contact.querySelector('.error-message[id^="email-error"]');
-                const phoneError = contact.querySelector('.error-message[id^="phone-error"]');
-                
-                if (emailError) emailError.id = `email-error-${index}`;
-                if (phoneError) phoneError.id = `phone-error-${index}`;
-                
-                const emailInput = contact.querySelector('input[name="email[]"]');
-                if (emailInput) {
-                    // Remove listeners antigos e adiciona novos com índice correto
-                    const newEmailInput = emailInput.cloneNode(true);
-                    emailInput.parentNode.replaceChild(newEmailInput, emailInput);
-                    applyEmailValidation(newEmailInput, index);
-                }
-            });
-        }
-
-        function addSocio() {
-            const container = document.getElementById('socios-container');
-            const count = container.querySelectorAll('.item-block').length + 1;
-            const newSocio = document.createElement('div');
-            newSocio.className = 'item-block';
-            newSocio.innerHTML = `<div class="item-header"><h3>Sócio ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Sócio:</label><input type="text" name="socio_nome[]" oninput="toggleCpfRequired(this)"><label>CPF do Sócio:</label><input type="text" name="socio_cpf[]" placeholder="000.000.000-00"><label>Data de Entrada:</label><input type="date" name="socio_data[]">`;
-            container.insertBefore(newSocio, container.querySelector('.btn-add'));
-            const dateInput = newSocio.querySelector('input[name="socio_data[]"]');
-            const nameInput = newSocio.querySelector('input[name="socio_nome[]"]');
-            setDateLimits(dateInput);
-            applyCpfMask(newSocio.querySelector('input[name="socio_cpf[]"]'));
-            applyNameValidation(nameInput);
-        }
-
-        function addColaborador() {
-            const container = document.getElementById('colaboradores-container');
-            const count = container.querySelectorAll('.item-block').length + 1;
-            const newColaborador = document.createElement('div');
-            newColaborador.className = 'item-block';
-            newColaborador.innerHTML = `<div class="item-header"><h3>Colaborador ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Colaborador:</label><input type="text" name="colaborador_nome[]" oninput="toggleCpfRequired(this)"><label>CPF do Colaborador:</label><input type="text" name="colaborador_cpf[]" placeholder="000.000.000-00"><label>Data de Admissão:</label><input type="date" name="colaborador_data[]">`;
-            container.insertBefore(newColaborador, container.querySelector('.btn-add'));
-            const dateInput = newColaborador.querySelector('input[name="colaborador_data[]"]');
-            const nameInput = newColaborador.querySelector('input[name="colaborador_nome[]"]');
-            setDateLimits(dateInput);
-            applyCpfMask(newColaborador.querySelector('input[name="colaborador_cpf[]"]'));
-            applyNameValidation(nameInput);
-        }
-
-        function toggleCpfRequired(nameInput) {
-            const parentBlock = nameInput.closest('.item-block');
-            const cpfInput = parentBlock.querySelector('input[name*="cpf"]');
-            if (nameInput.value.trim() !== '') {
-                cpfInput.required = true;
-            } else {
-                cpfInput.required = false;
-            }
-        }
-
-        // Função de validação antes do envio
+        // Função de validação do formulário
         function validateForm() {
             let isValid = true;
-            const statusMsg = document.querySelector('.mensagem-status');
+            clearStatusMessage();
             
             // Validar documento
             const documentInput = document.getElementById('documento');
@@ -618,113 +364,67 @@
                 }
             });
             
-            // Validar emails únicos
-            const emailInputs = document.querySelectorAll('input[name="email[]"]');
-            emailInputs.forEach((input, index) => {
-                if (input.value && !validateUniqueEmail(input, index)) {
-                    input.classList.add('input-error');
-                    const errorElement = document.getElementById(`email-error-${index}`);
-                    if (errorElement) errorElement.style.display = 'block';
-                    isValid = false;
-                }
-            });
+            // Validar primeiro contato obrigatório
+            const firstContact = document.querySelector('.contact-item');
+            const firstEmail = firstContact.querySelector('input[name="email[]"]');
+            const firstPhone = firstContact.querySelector('input[name="telefone[]"]');
             
-            // Validar nomes completos
-            const nameInputs = document.querySelectorAll('input[name*="nome[]"]');
-            nameInputs.forEach(input => {
-                if (input.value && !validateFullName(input)) {
-                    input.classList.add('input-error');
-                    const parentBlock = input.closest('.item-block');
-                    let errorElement = parentBlock.querySelector('.name-error');
-                    if (errorElement) errorElement.style.display = 'block';
-                    isValid = false;
-                }
-            });
-            
-            // Validar campos obrigatórios para contatos com email preenchido
-            const contactItems = document.querySelectorAll('.contact-item');
-            contactItems.forEach((contact, index) => {
-                const emailInput = contact.querySelector('input[name="email[]"]');
-                const departmentSelect = contact.querySelector('select[name="departamento[]"]');
-                const communicationCheckboxes = contact.querySelectorAll('input[name="comunicacoes[]"]:checked');
-                
-                // Se o email estiver preenchido, departamento e comunicação são obrigatórios
-                if (emailInput && emailInput.value.trim()) {
-                    // Validar departamento
-                    if (!departmentSelect.value) {
-                        departmentSelect.classList.add('input-error');
-                        let errorElement = contact.querySelector('.department-error');
-                        if (!errorElement) {
-                            errorElement = document.createElement('div');
-                            errorElement.className = 'error-message department-error';
-                            errorElement.textContent = 'Por favor, selecione um departamento.';
-                            departmentSelect.parentNode.insertBefore(errorElement, departmentSelect.nextSibling);
-                        }
-                        errorElement.style.display = 'block';
-                        isValid = false;
-                    } else {
-                        departmentSelect.classList.remove('input-error');
-                        const errorElement = contact.querySelector('.department-error');
-                        if (errorElement) errorElement.style.display = 'none';
-                    }
-                    
-                    // Validar comunicação
-                    if (communicationCheckboxes.length === 0) {
-                        const communicationContainer = contact.querySelector('.comunicacao-titulo').parentNode;
-                        let errorElement = contact.querySelector('.communication-error');
-                        if (!errorElement) {
-                            errorElement = document.createElement('div');
-                            errorElement.className = 'error-message communication-error';
-                            errorElement.textContent = 'Por favor, selecione pelo menos um tipo de comunicação.';
-                            communicationContainer.appendChild(errorElement);
-                        }
-                        errorElement.style.display = 'block';
-                        isValid = false;
-                    } else {
-                        const errorElement = contact.querySelector('.communication-error');
-                        if (errorElement) errorElement.style.display = 'none';
-                    }
-                }
-            });
+            if (!firstEmail.value || !firstPhone.value) {
+                showStatusMessage('Por favor, preencha pelo menos o e-mail e telefone do Contato 1.', 'erro');
+                isValid = false;
+            }
             
             if (!isValid) {
-                statusMsg.textContent = 'Por favor, corrija os erros destacados antes de enviar.';
-                statusMsg.className = 'mensagem-status mensagem-erro';
-                statusMsg.style.display = 'block';
+                showStatusMessage('Por favor, corrija os erros destacados antes de enviar.', 'erro');
             }
             
             return isValid;
         }
 
-        // Função de submissão do formulário
+        // Função de reset do formulário
+        function resetFormState() {
+            document.getElementById('optional-section').classList.add('hidden');
+            document.getElementById('reveal-button').textContent = 'Deseja atualizar sócios ou colaboradores? Clique aqui';
+            
+            document.querySelector('input[name="documentType"][value="cnpj"]').checked = true;
+            updateDocumentType();
+            
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            
+            clearStatusMessage();
+        }
+
+        // Função principal de submissão do formulário
         document.getElementById('formulario').addEventListener('submit', function (e) {
             e.preventDefault();
+            
+            // Verificar se a URL foi configurada
+            if (GOOGLE_APPS_SCRIPT_URL === 'SUA_URL_GOOGLE_APPS_SCRIPT_AQUI') {
+                showStatusMessage('❌ Erro de configuração: URL do Google Apps Script não foi definida. Entre em contato com o administrador.', 'erro');
+                return;
+            }
             
             // Validar formulário antes de enviar
             if (!validateForm()) {
                 return;
             }
             
-            const statusMsg = document.querySelector('.mensagem-status');
-            statusMsg.style.display = 'block';
-            const firstContact = document.querySelector('.contact-item');
-            if (!firstContact.querySelector('input[name="email[]"]').value || !firstContact.querySelector('input[name="telefone[]"]').value) {
-                statusMsg.textContent = 'Por favor, preencha pelo menos o e-mail e telefone do Contato 1.';
-                statusMsg.className = 'mensagem-status mensagem-erro';
-                return;
-            }
-            statusMsg.textContent = 'Enviando...';
-            statusMsg.className = 'mensagem-status';
+            // Desabilitar botão e mostrar loading
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span>Enviando...';
+            
+            showStatusMessage('Enviando dados...', 'info');
 
-            // Pega o valor do documento e remove a máscara antes de enviar
+            // Preparar dados
             const documentValue = document.getElementById('documento').value.replace(/\D/g, '');
             const documentType = document.querySelector('input[name="documentType"]:checked').value;
 
             const payload = {
-                // Envia tanto CNPJ quanto CPF para manter compatibilidade com a planilha
+                documentType: documentType,
                 cnpj: documentType === 'cnpj' ? documentValue : '',
                 cpf: documentType === 'cpf' ? documentValue : '',
-                documentType: documentType,
                 razaoSocial: document.getElementById('razao').value,
                 faturamento: document.getElementById('faturamento').value,
                 funcionarios: document.getElementById('funcionarios').value,
@@ -746,8 +446,8 @@
                 })).filter(c => c.nome)
             };
             
-            const url = 'https://script.google.com/macros/s/AKfycbz_iWAlH4-4x5r6nYxRptYFlKsCXMQW_Q5ED9ejkAqm2mQ1T3559Zkz8P7wso8dAVB5/exec';
-            fetch(url, { 
+            // Enviar dados
+            fetch(GOOGLE_APPS_SCRIPT_URL, { 
                 method: 'POST', 
                 mode: 'no-cors', 
                 cache: 'no-cache', 
@@ -755,68 +455,70 @@
                 body: JSON.stringify(payload), 
                 redirect: 'follow' 
             })
-            .then(res => {
-                statusMsg.textContent = '✅ Dados enviados com sucesso!📩';
-                statusMsg.className = 'mensagem-status mensagem-sucesso';
+            .then(response => {
+                // Com no-cors, não podemos ler a resposta
+                // Assumimos sucesso se não houve erro de rede
+                showStatusMessage('✅ Dados enviados com sucesso! 📩', 'sucesso');
+                
+                // Reset do formulário
                 document.getElementById('formulario').reset();
-                document.getElementById('optional-section').classList.add('hidden');
-                document.getElementById('reveal-button').classList.remove('hidden');
-                // Resetar para CNPJ por padrão
-                document.querySelector('input[name="documentType"][value="cnpj"]').checked = true;
-                updateDocumentField();
-            }).catch(error => {
-                statusMsg.textContent = '❌ Ocorreu um erro. Tente novamente.';
-                statusMsg.className = 'mensagem-status mensagem-erro';
+                resetFormState();
+            })
+            .catch(error => {
+                console.error('Erro ao enviar:', error);
+                showStatusMessage('❌ Erro ao enviar dados. Verifique sua conexão e tente novamente.', 'erro');
+            })
+            .finally(() => {
+                // Reabilitar botão
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Enviar Atualização';
             });
         });
 
-               // Inicialização
+        // Funções para adicionar contatos, sócios e colaboradores
+        function addContact() {
+            const container = document.getElementById('contact-section');
+            const count = container.querySelectorAll('.contact-item').length + 1;
+            const newContact = document.createElement('div');
+            newContact.className = 'contact-item item-block';
+            newContact.innerHTML = `
+                <div class="item-header"><h3>Contato ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove();">Remover</span></div>
+                <label>E-mail:</label><input type="email" name="email[]" placeholder="ex: contato@empresa.com">
+                <div class="error-message" id="email-error-${count - 1}">Este e-mail já foi cadastrado em outro contato.</div>
+                <label>Telefone:</label><input type="tel" name="telefone[]" placeholder="(DD) 99999-9999">
+                <div class="error-message" id="phone-error-${count - 1}">Telefone inválido. Verifique o DDD e evite sequências numéricas.</div>
+                <label>Departamento:</label><select name="departamento[]"><option value="">Selecione</option><option value="Socio">Sócio</option><option value="Diretoria">Diretoria</option><option value="Recursos Humanos">RH</option><option value="Departamento Pessoal">DP</option><option value="Financeiro">Financeiro</option><option value="Contabilidade">Contabilidade</option><option value="Juridico">Jurídico</option><option value="Marketing">Marketing</option><option value="Outros">Outros</option></select>
+                <p class="comunicacao-titulo">Selecione os tipos de comunicação que deseja receber:</p>
+                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Boletos"> Boletos e Comunicados Financeiros</label>
+                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Cursos"> Cursos, eventos e outros produtos e serviços</label>
+                <label class="checkbox-label"><input type="checkbox" name="comunicacoes[]" value="Assembleias"> Convocações para Assembleias</label>
+                <label class="checkbox-label" style="margin-bottom: 20px;"><input type="checkbox" name="comunicacoes[]" value="Noticias"> Notícias e Informativos Gerais</label>
+            `;
+            container.insertBefore(newContact, container.querySelector('.btn-add'));
+        }
+
+        function addSocio() {
+            const container = document.getElementById('socios-container');
+            const count = container.querySelectorAll('.item-block').length + 1;
+            const newSocio = document.createElement('div');
+            newSocio.className = 'item-block';
+            newSocio.innerHTML = `<div class="item-header"><h3>Sócio ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Sócio:</label><input type="text" name="socio_nome[]"><label>CPF do Sócio:</label><input type="text" name="socio_cpf[]" placeholder="000.000.000-00"><label>Data de Entrada:</label><input type="date" name="socio_data[]">`;
+            container.insertBefore(newSocio, container.querySelector('.btn-add'));
+        }
+
+        function addColaborador() {
+            const container = document.getElementById('colaboradores-container');
+            const count = container.querySelectorAll('.item-block').length + 1;
+            const newColaborador = document.createElement('div');
+            newColaborador.className = 'item-block';
+            newColaborador.innerHTML = `<div class="item-header"><h3>Colaborador ${count}</h3><span class="btn-remove" onclick="this.parentElement.parentElement.remove()">Remover</span></div><label>Nome do Colaborador:</label><input type="text" name="colaborador_nome[]"><label>CPF do Colaborador:</label><input type="text" name="colaborador_cpf[]" placeholder="000.000.000-00"><label>Data de Admissão:</label><input type="date" name="colaborador_data[]">`;
+            container.insertBefore(newColaborador, container.querySelector('.btn-add'));
+        }
+
+        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Configurar listeners para mudança de tipo de documento
-            document.querySelectorAll('input[name="documentType"]').forEach(radio => {
-                radio.addEventListener('change', updateDocumentField);
-            });
-
-            // --- INÍCIO DA ALTERAÇÃO ---
-            // Lógica aprimorada para pré-preenchimento
-            const urlParams = new URLSearchParams(window.location.search);
-            const documentoInput = document.getElementById('documento');
-
-            // Verifica se há parâmetro 'cnpj' ou 'cpf' na URL
-            if (urlParams.has('cnpj')) {
-                // Se tiver CNPJ, seleciona a opção Pessoa Jurídica
-                document.querySelector('input[name="documentType"][value="cnpj"]').checked = true;
-                documentoInput.value = urlParams.get('cnpj');
-
-            } else if (urlParams.has('cpf')) {
-                // Se tiver CPF, seleciona a opção Pessoa Física
-                document.querySelector('input[name="documentType"][value="cpf"]').checked = true;
-                documentoInput.value = urlParams.get('cpf');
-            }
-            
-            // Pré-preenche a razão social se o parâmetro existir
-            if (urlParams.has('razaoSocial')) {
-                document.getElementById('razao').value = urlParams.get('razaoSocial');
-            }
-            // --- FIM DA ALTERAÇÃO ---
-            
-            // Aplicar máscaras e validações aos campos existentes
-            document.querySelectorAll('input[name="telefone[]"]').forEach(applyPhoneMask);
-            document.querySelectorAll('input[name="email[]"]').forEach((input, index) => {
-                applyEmailValidation(input, index);
-            });
-            applyCurrencyMask(document.getElementById('faturamento'));
-            
-            // Configurar campo de documento inicial (aplica máscara e validação corretas)
-            updateDocumentField();
-
-            // Dispara um evento para garantir que a máscara seja aplicada ao valor vindo da URL
-            if (documentoInput.value) {
-                documentoInput.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-
+            updateDocumentType();
         });
     </script>
 </body>
 </html>
-

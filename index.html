@@ -634,6 +634,11 @@ document.getElementById('formulario').addEventListener('submit', function (e) {
             applyEmailValidation(input, index);
         });
         applyCurrencyMask(document.getElementById('faturamento'));
-    </script>
+
+// Aplica máscara ao campo CNPJ em tempo real
+document.getElementById('cnpj').addEventListener('input', function() {
+  applyCnpjMask(this);
+});
+</script>
 </body>
 </html>
